@@ -38,47 +38,10 @@ class DiaryFragment : Fragment() {
 
     private fun recyclerViewInit() {
         val dbManager = DBManager(context!!)
-        val workList = dbManager.getWorkAll()
-//        val dummyData = ArrayList<WorkInfo>()
-//        dummyData.add(
-//            WorkInfo(
-//                "학원알바",
-//                3,
-//                "18:00",
-//                "19:00",
-//                8590
-//            )
-//        )
-//        dummyData.add(
-//            WorkInfo(
-//                "알바하기싫어",
-//                4,
-//                "21:00",
-//                "23:00",
-//                9000
-//            )
-//        )
-//        dummyData.add(
-//            WorkInfo(
-//                "물류창고",
-//                6,
-//                "07:00",
-//                "12:00",
-//                10000
-//            )
-//        )
-
-        val dummyData2 = ArrayList<DiaryInfo>()
-        dummyData2.add(
-            DiaryInfo(
-                2020,
-                8,
-                workList
-            )
-        )
+        val workList = dbManager.getDiaryAll()
 
         diaryRecyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
-        diaryAdapter = DiaryAdapter(dummyData2)
+        diaryAdapter = DiaryAdapter(workList)
         diaryRecyclerView.adapter = diaryAdapter
     }
 

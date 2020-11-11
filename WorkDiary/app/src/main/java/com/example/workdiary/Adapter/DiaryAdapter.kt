@@ -40,7 +40,19 @@ class DiaryAdapter(val items:ArrayList<DiaryInfo>): RecyclerView.Adapter<DiaryAd
         holder.workList.layoutManager = LinearLayoutManager(holder.itemView.context, LinearLayoutManager.VERTICAL, false)
         holder.workList.adapter =
             WorkForDiaryAdapter(items[position].workList)
-        //아 이거 totalMoney 계산해서 ㄱㄱ
-        holder.totalMoney.text = "정산값 : " + "3000" + "원"
+        //totalMoney 계산하기
+        var totalMoney = 0
+        for(i in 0 until items[position].workList.size){
+            //노동시간 구하기
+            val startTimeStamp = items[position].workList[i].workStartTime.split(":")[0].toInt()*60 +
+                    items[position].workList[i].workStartTime.split(":")[1].toInt()
+            val endTimeStamp = items[position].workList[i].workEndTime.split(":")[0].toInt()*60 +
+                    items[position].workList[i].workEndTime.split(":")[1].toInt()
+            val workTimeHour = (endTimeStamp-startTimeStamp)/60
+            val workTimeMin = if((endTimeStamp-startTimeStamp)%60 >= 30) 0.5 else 0.0
+            totalMoney += (items[position].workList[i].workMoney * workTimeHour) +
+                    (items[position].workList[i].workMoney * workTimeMin).toInt()
+        }
+        holder.totalMoney.text = "정산값 : ${totalMoney}원"
     }
 }

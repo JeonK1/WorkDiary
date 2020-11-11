@@ -22,6 +22,7 @@ class WorkForDiaryAdapter(val items:ArrayList<WorkInfo>): RecyclerView.Adapter<W
         var title: TextView = itemView.findViewById(R.id.tv_itemworkfordiary_title)
         var workDay: TextView = itemView.findViewById(R.id.tv_itemworkfordiary_day)
         var workTime: TextView = itemView.findViewById(R.id.tv_itemworkfordiary_workTime)
+        var money: TextView = itemView.findViewById(R.id.tv_itemworkfordiary_money)
 
 
         init {
@@ -52,11 +53,12 @@ class WorkForDiaryAdapter(val items:ArrayList<WorkInfo>): RecyclerView.Adapter<W
         val endTimeStamp = items[position].workEndTime.split(":")[0].toInt()*60 +
                 items[position].workEndTime.split(":")[1].toInt()
         val workTimeHour = (endTimeStamp-startTimeStamp)/60
-        val workTimeMin = (endTimeStamp-startTimeStamp)%60
+        val workTimeMin = if((endTimeStamp-startTimeStamp)%60 >= 30) 30 else 0
 
         //xml에 적용하기
         holder.title.text = items[position].workTitle
         holder.workDay.text = items[position].workDate.split("/")[2].toInt().toString()+"일"
-        holder.workTime.text = "( $workTimeHour 시간 "+"%02d".format(workTimeMin)+"분 )"
+        holder.workTime.text = "${workTimeHour}시간 "+"%02d".format(workTimeMin)+"분"
+        holder.money.text = "${items[position].workMoney}원"
     }
 }

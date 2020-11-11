@@ -1,5 +1,6 @@
 package com.example.workdiary.Adapter
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,6 +9,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.workdiary.R
 import com.example.workdiary.Model.WorkInfo
+import com.example.workdiary.SQLite.DBManager
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
@@ -16,8 +18,12 @@ class WorkAdapter(val items:ArrayList<WorkInfo>): RecyclerView.Adapter<WorkAdapt
     interface  OnItemClickListener{
         fun OnItemClick(holder: MyViewHolder, view: View, position: Int)
     }
+    interface OnOKBtnClickListener{
+        fun OnOkBtnClick(holder: MyViewHolder, view: View, position: Int)
+    }
 
     var itemClickListener: OnItemClickListener?=null
+    var okBtnClickListener: OnOKBtnClickListener?=null
 
     inner class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         var title: TextView = itemView.findViewById(R.id.tv_itemwork_title)
@@ -31,6 +37,9 @@ class WorkAdapter(val items:ArrayList<WorkInfo>): RecyclerView.Adapter<WorkAdapt
         init {
             itemView.setOnClickListener {
                 itemClickListener?.OnItemClick(this, it, adapterPosition)
+            }
+            okBtn.setOnClickListener {
+                okBtnClickListener?.OnOkBtnClick(this, it, adapterPosition)
             }
         }
     }
@@ -78,8 +87,6 @@ class WorkAdapter(val items:ArrayList<WorkInfo>): RecyclerView.Adapter<WorkAdapt
             holder.dday.text = workDday
             holder.workStartNEnd.text = "%02d".format(startTimeHour)+":"+"%02d".format(startTimeMin)+" ~ "+"%02d".format(endTimeHour)+":"+"%02d".format(endTimeMin)
             holder.workTime.text = "( ${workTimeHour}시간 "+"%02d".format(workTimeMin)+"분 )"
-            holder.okBtn.setOnClickListener {
-            }
         }
     }
 }

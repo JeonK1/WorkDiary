@@ -202,6 +202,12 @@ class WorkFragment : Fragment() {
                 }
             }
         }
+        workAdapter.okBtnClickListener = object : WorkAdapter.OnOKBtnClickListener{
+            override fun OnOkBtnClick(holder: WorkAdapter.MyViewHolder, view: View, position: Int) {
+                dbManager.setWorkCheck(workAdapter.items[position].wId)
+                recyclerViewInit()
+            }
+        }
         workRecyclerView.adapter = workAdapter
     }
 
