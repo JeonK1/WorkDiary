@@ -91,12 +91,14 @@ class DBManager {
         return setNameList
     }
 
-    fun setWorkCheck(wId: Int){
-        Log.e("test", wId.toString())
-        val query = "update $tableName set wIsDone=1 where wId=${wId}"
-        Log.e("test", query)
+    fun deleteWork(wId: Int){
+        val query = "delete from $tableName where wId=${wId}"
         myDatabase.execSQL(query)
-        Log.e("test", wId.toString())
+    }
+
+    fun setWorkCheck(wId: Int){
+        val query = "update $tableName set wIsDone=1 where wId=${wId}"
+        myDatabase.execSQL(query)
     }
 
     fun getDiaryAll(): ArrayList<DiaryInfo>{

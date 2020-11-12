@@ -22,9 +22,9 @@ class AddWorkActivity : AppCompatActivity() {
     lateinit var dateSetListener:DatePickerDialog.OnDateSetListener
     lateinit var startTimeSetListener:TimePickerDialog.OnTimeSetListener
     lateinit var endTimeSetListener:TimePickerDialog.OnTimeSetListener
-    lateinit var workYear: String
-    lateinit var workMonth: String
-    lateinit var workDay: String
+    var workYear=""
+    var workMonth=""
+    var workDay=""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,8 +38,11 @@ class AddWorkActivity : AppCompatActivity() {
 
     private fun defaultInit() {
         val cal = Calendar.getInstance()
-        tv_addwork_mon.text = "%02d".format(cal.get(Calendar.MONTH)+1) + "월"
-        tv_addwork_day.text = "%02d".format(cal.get(Calendar.DAY_OF_MONTH)) + "일"
+        workYear=cal.get(Calendar.YEAR).toString()
+        workMonth=(cal.get(Calendar.MONTH)+1).toString()
+        workDay=cal.get(Calendar.DAY_OF_MONTH).toString()
+        tv_addwork_mon.text = "%02d".format(workMonth.toInt()) + "월"
+        tv_addwork_day.text = "%02d".format(workDay.toInt()) + "일"
         tv_addwork_dayofweek.text = "(" + DAY_OF_WEEK[cal.get(Calendar.DAY_OF_WEEK)] + ")"
         tv_addwork_startTime.text = "%02d".format(cal.get(Calendar.HOUR)) + ":00"
         tv_addwork_endTime.text = "%02d".format(cal.get(Calendar.HOUR)+1) + ":00"
@@ -156,4 +159,8 @@ class AddWorkActivity : AppCompatActivity() {
             finish()
         }
     }
+}
+
+private operator fun AdapterView.OnItemClickListener.invoke(onItemClickListener: AdapterView.OnItemClickListener) {
+
 }

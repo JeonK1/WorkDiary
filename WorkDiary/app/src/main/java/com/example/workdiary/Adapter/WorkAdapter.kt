@@ -18,11 +18,15 @@ class WorkAdapter(val items:ArrayList<WorkInfo>): RecyclerView.Adapter<WorkAdapt
     interface  OnItemClickListener{
         fun OnItemClick(holder: MyViewHolder, view: View, position: Int)
     }
+    interface OnLongItemClickListener{
+        fun OnLongItemClick(holder: MyViewHolder, view: View, position: Int)
+    }
     interface OnOKBtnClickListener{
         fun OnOkBtnClick(holder: MyViewHolder, view: View, position: Int)
     }
 
     var itemClickListener: OnItemClickListener?=null
+    var itemLongClickListener: OnLongItemClickListener?= null
     var okBtnClickListener: OnOKBtnClickListener?=null
 
     inner class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -37,6 +41,10 @@ class WorkAdapter(val items:ArrayList<WorkInfo>): RecyclerView.Adapter<WorkAdapt
         init {
             itemView.setOnClickListener {
                 itemClickListener?.OnItemClick(this, it, adapterPosition)
+            }
+            itemView.setOnLongClickListener {
+                itemLongClickListener?.OnLongItemClick(this, it, adapterPosition)
+                return@setOnLongClickListener true
             }
             okBtn.setOnClickListener {
                 okBtnClickListener?.OnOkBtnClick(this, it, adapterPosition)

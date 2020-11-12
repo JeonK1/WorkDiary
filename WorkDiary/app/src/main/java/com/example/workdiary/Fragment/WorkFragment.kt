@@ -24,6 +24,7 @@ import com.example.workdiary.R
 import com.example.workdiary.Model.WorkInfo
 import com.example.workdiary.SQLite.DBManager
 import kotlinx.android.synthetic.main.activity_add_work.view.*
+import kotlinx.android.synthetic.main.dialog_box.view.*
 import java.util.*
 
 /**
@@ -77,135 +78,60 @@ class WorkFragment : Fragment() {
                     //마지막 공간은 노동 추가버튼, 클릭시 Activity 생성
                     val intent = Intent(context, AddWorkActivity::class.java)
                     startActivity(intent)
-
-                    /**
-                    // DialogView 생성
-                    val mDialogView = LayoutInflater.from(context).inflate(R.layout.activity_add_work, null)
-                    val mBuilder = AlertDialog.Builder(context!!).setView(mDialogView)
-                    val mAlertDialog = mBuilder.show()
-                    mAlertDialog.setCanceledOnTouchOutside(false)
-                    mAlertDialog.window!!.setGravity(Gravity.CENTER)
-
-                    // default 값 init
-                    val cal = Calendar.getInstance()
-                    mDialogView.tv_addwork_mon.text = "%02d".format(cal.get(Calendar.MONTH)+1) + "월"
-                    mDialogView.tv_addwork_day.text = "%02d".format(cal.get(Calendar.DAY_OF_MONTH)) + "일"
-                    mDialogView.tv_addwork_dayofweek.text = "(" + DAY_OF_WEEK[cal.get(Calendar.DAY_OF_WEEK)] + ")"
-                    mDialogView.tv_addwork_startTime.text = "%02d".format(cal.get(Calendar.HOUR)) + ":00"
-                    mDialogView.tv_addwork_endTime.text = "%02d".format(cal.get(Calendar.HOUR)+1) + ":00"
-
-                    //listener init
-                    mDialogView.act_addwork_title.addTextChangedListener(object : TextWatcher {
-                        override fun afterTextChanged(s: Editable?) {
-                            // 세트입력 autoCompleteListener에 List 추가
-                            val setNameList = dbManager.getSetNameAll(mDialogView.act_addwork_title.text.toString())
-                            if(setNameList.size>0) {
-                                // title에 적은게 db에 잇는거면 set쪽에 List 적용하기
-                                val adapter = ArrayAdapter(
-                                    context!!,
-                                    android.R.layout.simple_dropdown_item_1line,
-                                    setNameList
-                                )
-                                mDialogView.act_addwork_set.setAdapter(adapter)
-                            } else {
-                                // title에 적은게 db에 없으며 set쪽에 빈List 적용하기
-                                val emptyAdapter = ArrayAdapter(
-                                    context!!,
-                                    android.R.layout.simple_dropdown_item_1line,
-                                    ArrayList<String>()
-                                )
-                                mDialogView.act_addwork_set.setAdapter(emptyAdapter)
-                            }
-                        }
-                        override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-                        }
-                        override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                        }
-                    })
-
-                    //autoCompleteInit
-                    val workNameList = dbManager.getWorkNameAll()
-                    val adapter = ArrayAdapter(
-                        context!!,
-                        android.R.layout.simple_dropdown_item_1line,
-                        workNameList
-                    )
-                    mDialogView.act_addwork_title.setAdapter(adapter)
-
-                    //pickerInit
-                    dateSetListener =
-                        DatePickerDialog.OnDateSetListener { view, year, monthOfYear, dayOfMonth ->
-                            val cal = Calendar.getInstance()
-                            cal.set(Calendar.YEAR, year)
-                            cal.set(Calendar.MONTH, monthOfYear)
-                            cal.set(Calendar.DAY_OF_MONTH, dayOfMonth)
-                            workYear = cal.get(Calendar.YEAR).toString()
-                            workMonth = (cal.get(Calendar.MONTH) + 1).toString()
-                            workDay = cal.get(Calendar.DAY_OF_MONTH).toString()
-                            mDialogView.tv_addwork_mon.text = "%02d".format(workMonth.toInt()) + "월"
-                            mDialogView.tv_addwork_day.text = "%02d".format(workDay.toInt()) + "일"
-                            mDialogView.tv_addwork_dayofweek.text = "(" + DAY_OF_WEEK[cal.get(Calendar.DAY_OF_WEEK)] + ")"
-                        }
-                    startTimeSetListener =
-                        TimePickerDialog.OnTimeSetListener { view, hourOfDay, minute ->
-                            mDialogView.tv_addwork_startTime.text = "%02d".format(hourOfDay)+":"+"%02d".format(minute)
-                        }
-                    endTimeSetListener =
-                        TimePickerDialog.OnTimeSetListener { view, hourOfDay, minute ->
-                            mDialogView.tv_addwork_endTime.text = "%02d".format(hourOfDay)+":"+"%02d".format(minute)
-                        }
-
-                    //buttonInit
-                    mDialogView.ll_addwork_pickStartTime.setOnClickListener {
-                        TimePickerDialog(context!!,
-                            android.R.style.Theme_Holo_Light_Dialog,
-                            startTimeSetListener,
-                            Calendar.getInstance().get(Calendar.HOUR_OF_DAY),
-                            Calendar.getInstance().get(Calendar.MINUTE),
-                            android.text.format.DateFormat.is24HourFormat(context!!)
-                        ).show()
-                    }
-                    mDialogView.ll_addwork_pickEndTime.setOnClickListener {
-                        TimePickerDialog(context!!,
-                            android.R.style.Theme_Holo_Light_Dialog,
-                            endTimeSetListener,
-                            Calendar.getInstance().get(Calendar.HOUR_OF_DAY),
-                            Calendar.getInstance().get(Calendar.MINUTE),
-                            android.text.format.DateFormat.is24HourFormat(context!!)
-                        ).show()
-                    }
-                    mDialogView.ll_addwork_pickDate.setOnClickListener {
-                        DatePickerDialog(context!!,
-                            dateSetListener,
-                            Calendar.getInstance().get(Calendar.YEAR),
-                            Calendar.getInstance().get(Calendar.MONTH),
-                            Calendar.getInstance().get(Calendar.DAY_OF_MONTH)
-                        ).show()
-                    }
-                    mDialogView.btn_addwork_inputLowestMoney.setOnClickListener {
-                        mDialogView.et_addwork_money.setText("8590")
-                    }
-                    mDialogView.tv_addwork_saveBtn.setOnClickListener {
-                        val workTitle = mDialogView.act_addwork_title.text.toString()
-                        val workSet = mDialogView.act_addwork_set.text.toString()
-                        val workDate = "$workYear/${"%02d".format(workMonth.toInt())}/${"%02d".format(workDay.toInt())}"
-                        val workStartTime = mDialogView.tv_addwork_startTime.text.toString()
-                        val workEndTime = mDialogView.tv_addwork_endTime.text.toString()
-                        val workMoney = mDialogView.et_addwork_money.text.toString().toInt()
-                        dbManager.addWork(workTitle, workSet, workDate, workStartTime, workEndTime, workMoney)
-                        mAlertDialog.dismiss()
-                    }
-                    mDialogView.ib_addwork_backBtn.setOnClickListener {
-                        mAlertDialog.dismiss()
-                    }
-                    */
                 }
             }
         }
+        workAdapter.itemLongClickListener = object : WorkAdapter.OnLongItemClickListener{
+            override fun OnLongItemClick(
+                holder: WorkAdapter.MyViewHolder,
+                view: View,
+                position: Int
+            ) {
+                // DialogView 생성
+                val mDialogView = LayoutInflater.from(this@WorkFragment.context!!).inflate(R.layout.dialog_box, null)
+                val mBuilder = AlertDialog.Builder(this@WorkFragment.context!!).setView(mDialogView)
+                val mAlertDialog = mBuilder.show()
+                mAlertDialog.setCanceledOnTouchOutside(false)
+                mAlertDialog.window!!.setGravity(Gravity.CENTER)
+                mDialogView.tv_dialog_title.setText("노동일정 제거")
+                mDialogView.tv_dialog_context.setText("${holder.date.text.toString()}의 ${holder.title.text.toString()} 노동 일정을 제거할까요??")
+                mDialogView.tv_dialog_ok.setText("예")
+                mDialogView.tv_dialog_no.setText("아니오")
+                mDialogView.tv_dialog_ok.setOnClickListener {
+                    // 확인 버튼 누름
+                    dbManager.deleteWork(workAdapter.items[position].wId)
+                    recyclerViewInit()
+                    mAlertDialog.dismiss()
+                }
+                mDialogView.tv_dialog_no.setOnClickListener{
+                    // 취소 버튼 누름
+                    mAlertDialog.dismiss()
+                }
+            }
+
+        }
         workAdapter.okBtnClickListener = object : WorkAdapter.OnOKBtnClickListener{
             override fun OnOkBtnClick(holder: WorkAdapter.MyViewHolder, view: View, position: Int) {
-                dbManager.setWorkCheck(workAdapter.items[position].wId)
-                recyclerViewInit()
+                // DialogView 생성
+                val mDialogView = LayoutInflater.from(this@WorkFragment.context!!).inflate(R.layout.dialog_box, null)
+                val mBuilder = AlertDialog.Builder(this@WorkFragment.context!!).setView(mDialogView)
+                val mAlertDialog = mBuilder.show()
+                mAlertDialog.setCanceledOnTouchOutside(false)
+                mAlertDialog.window!!.setGravity(Gravity.CENTER)
+                mDialogView.tv_dialog_title.setText("노동 완료")
+                mDialogView.tv_dialog_context.setText("노동 기록을 일지로 옮길까요??")
+                mDialogView.tv_dialog_ok.setText("예")
+                mDialogView.tv_dialog_no.setText("아니오")
+                mDialogView.tv_dialog_ok.setOnClickListener {
+                    // 확인 버튼 누름
+                    dbManager.setWorkCheck(workAdapter.items[position].wId)
+                    recyclerViewInit()
+                    mAlertDialog.dismiss()
+                }
+                mDialogView.tv_dialog_no.setOnClickListener{
+                    // 취소 버튼 누름
+                    mAlertDialog.dismiss()
+                }
             }
         }
         workRecyclerView.adapter = workAdapter
