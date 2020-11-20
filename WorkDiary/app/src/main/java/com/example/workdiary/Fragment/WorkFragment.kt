@@ -3,27 +3,21 @@ package com.example.workdiary.Fragment
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.content.Intent
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
-import android.util.Log
 import android.view.Gravity
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ArrayAdapter
+import android.widget.LinearLayout
+import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.workdiary.Activity.AddWorkActivity
 import com.example.workdiary.Adapter.WorkAdapter
 import com.example.workdiary.R
-import com.example.workdiary.Model.WorkInfo
 import com.example.workdiary.SQLite.DBManager
-import kotlinx.android.synthetic.main.activity_add_work.view.*
 import kotlinx.android.synthetic.main.dialog_box.view.*
 import java.util.*
 
@@ -55,6 +49,14 @@ class WorkFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         recyclerViewInit()
+        buttonInit(view)
+    }
+
+    private fun buttonInit(view: View) {
+        view.findViewById<TextView>(R.id.tv_work_addBtn).setOnClickListener {
+            val intent = Intent(context, AddWorkActivity::class.java)
+            startActivity(intent)
+        }
     }
 
     override fun onResume() {
@@ -74,15 +76,17 @@ class WorkFragment : Fragment() {
                 view: View,
                 position: Int
             ) {
-                if(position == workList.size){
-                    //마지막 공간은 노동 추가버튼, 클릭시 Activity 생성
-                    val intent = Intent(context, AddWorkActivity::class.java)
-                    startActivity(intent)
+                // 클릭하면 삭제/확인 버튼 show/hide 하기
+                val btnLayout = view.findViewById<LinearLayout>(R.id.ll_itemwork_btnlayout)
+                if(btnLayout.visibility == View.VISIBLE){
+                    btnLayout.visibility = View.GONE
+                } else {
+                    btnLayout.visibility = View.VISIBLE
                 }
             }
         }
-        workAdapter.itemLongClickListener = object : WorkAdapter.OnLongItemClickListener{
-            override fun OnLongItemClick(
+        workAdapter.delBtnClickListener = object : WorkAdapter.OnDelBtnClickListener{
+            override fun OnDeleteBtnClick(
                 holder: WorkAdapter.MyViewHolder,
                 view: View,
                 position: Int
@@ -108,7 +112,6 @@ class WorkFragment : Fragment() {
                     mAlertDialog.dismiss()
                 }
             }
-
         }
         workAdapter.okBtnClickListener = object : WorkAdapter.OnOKBtnClickListener{
             override fun OnOkBtnClick(holder: WorkAdapter.MyViewHolder, view: View, position: Int) {

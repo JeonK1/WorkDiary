@@ -14,6 +14,7 @@ import android.widget.AutoCompleteTextView
 import com.example.workdiary.R
 import com.example.workdiary.SQLite.DBManager
 import kotlinx.android.synthetic.main.activity_add_work.*
+import java.text.SimpleDateFormat
 import java.util.*
 
 class AddWorkActivity : AppCompatActivity() {
@@ -75,6 +76,25 @@ class AddWorkActivity : AppCompatActivity() {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
             }
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+            }
+        })
+        act_addwork_set.addTextChangedListener(object : TextWatcher{
+            override fun afterTextChanged(s: Editable?) {
+                val dbManager = DBManager(applicationContext)
+                val curTitle = act_addwork_title.text.toString()
+                val curSet = act_addwork_set.text.toString()
+                val workInfo = dbManager.getWork(curTitle, curSet)
+                if(workInfo!=null) {
+                    tv_addwork_startTime.text = "%02d".format(workInfo?.workStartTime.split(":")[0].toInt()) + ":" +
+                            "%02d".format(workInfo?.workStartTime.split(":")[1].toInt())
+                    tv_addwork_endTime.text = "%02d".format(workInfo?.workEndTime.split(":")[0].toInt()) + ":" +
+                            "%02d".format(workInfo?.workEndTime.split(":")[1].toInt())
+                    et_addwork_money.setText(workInfo.workMoney.toString())
+                }
+            }
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+            }
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
             }
         })
     }

@@ -18,33 +18,34 @@ class WorkAdapter(val items:ArrayList<WorkInfo>): RecyclerView.Adapter<WorkAdapt
     interface  OnItemClickListener{
         fun OnItemClick(holder: MyViewHolder, view: View, position: Int)
     }
-    interface OnLongItemClickListener{
-        fun OnLongItemClick(holder: MyViewHolder, view: View, position: Int)
+    interface OnDelBtnClickListener{
+        fun OnDeleteBtnClick(holder: MyViewHolder, view: View, position: Int)
     }
     interface OnOKBtnClickListener{
         fun OnOkBtnClick(holder: MyViewHolder, view: View, position: Int)
     }
 
     var itemClickListener: OnItemClickListener?=null
-    var itemLongClickListener: OnLongItemClickListener?= null
-    var okBtnClickListener: OnOKBtnClickListener?=null
+    var delBtnClickListener: OnDelBtnClickListener?=null
+    var okBtnClickListener: OnOKBtnClickListener?= null
 
     inner class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         var title: TextView = itemView.findViewById(R.id.tv_itemwork_title)
+        var setName: TextView = itemView.findViewById(R.id.tv_itemwork_set)
         var date: TextView = itemView.findViewById(R.id.tv_itemwork_date)
         var dday: TextView = itemView.findViewById(R.id.tv_itemwork_dday)
         var workStartNEnd: TextView = itemView.findViewById(R.id.tv_itemwork_startNend)
         var workTime: TextView = itemView.findViewById(R.id.tv_itemwork_workTime)
         var wrapper: LinearLayout = itemView.findViewById(R.id.ll_itemwork_wrapper)
+        var deleteBtn: TextView = itemView.findViewById(R.id.tv_itemwork_delete)
         var okBtn: TextView = itemView.findViewById(R.id.tv_itemwork_okBtn)
 
         init {
             itemView.setOnClickListener {
                 itemClickListener?.OnItemClick(this, it, adapterPosition)
             }
-            itemView.setOnLongClickListener {
-                itemLongClickListener?.OnLongItemClick(this, it, adapterPosition)
-                return@setOnLongClickListener true
+            deleteBtn.setOnClickListener {
+                delBtnClickListener?.OnDeleteBtnClick(this, it, adapterPosition)
             }
             okBtn.setOnClickListener {
                 okBtnClickListener?.OnOkBtnClick(this, it, adapterPosition)
@@ -57,44 +58,35 @@ class WorkAdapter(val items:ArrayList<WorkInfo>): RecyclerView.Adapter<WorkAdapt
     }
 
     override fun getItemCount(): Int {
-        return items.size+1
+        return items.size
     }
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
-        if(position == items.size){
-            holder.title.visibility = View.INVISIBLE
-            holder.date.visibility = View.INVISIBLE
-            holder.dday.visibility = View.INVISIBLE
-            holder.workStartNEnd.visibility = View.INVISIBLE
-            holder.workTime.visibility = View.INVISIBLE
-            holder.okBtn.visibility = View.INVISIBLE
-            holder.wrapper.setBackgroundResource(R.color.colorPrimary)
-        } else {
-            //dday 구하기
-            val sf = SimpleDateFormat("yyyy/MM/dd")
-            val today = Calendar.getInstance()
-            val workDate = sf.parse(items[position].workDate)!!
-            val workDday = if(today.time.time < workDate.time) "D-"+((today.time.time - workDate.time) / (60*60*24*1000)).toString() else "기한이 지났습니다"
+        //dday 구하기
+        val sf = SimpleDateFormat("yyyy/MM/dd")
+        val today = Calendar.getInstance()
+        val workDate = sf.parse(items[position].workDate)!!
+        val workDday = if(today.time.time < workDate.time) "D-"+((workDate.time - today.time.time) / (60*60*24*1000)).toString() else "기한이 지났습니다"
 
-            //노동시간 구하기
-            val startTimeHour = items[position].workStartTime.split(":")[0].toInt()
-            val startTimeMin = items[position].workStartTime.split(":")[1].toInt()
-            val startTimeStamp = startTimeHour*60 +startTimeMin
+        //노동시간 구하기
+        val startTimeHour = items[position].workStartTime.split(":")[0].toInt()
+        val startTimeMin = items[position].workStartTime.split(":")[1].toInt()
+        val startTimeStamp = startTimeHour*60 +startTimeMin
 
-            val endTimeHour = items[position].workEndTime.split(":")[0].toInt()
-            val endTimeMin = items[position].workEndTime.split(":")[1].toInt()
-            val endTimeStamp = endTimeHour*60 + endTimeMin
+        val endTimeHour = items[position].workEndTime.split(":")[0].toInt()
+        val endTimeMin = items[position].workEndTime.split(":")[1].toInt()
+        val endTimeStamp = endTimeHour*60 + endTimeMin
 
-            val workTimeHour = (endTimeStamp-startTimeStamp)/60
-            val workTimeMin = (endTimeStamp-startTimeStamp)%60
+        val workTimeHour = (endTimeStamp-startTimeStamp)/60
+        val workTimeMin = (endTimeStamp-startTimeStamp)%60
 
-            //xml에 적용하기
-            holder.title.text = items[position].workTitle
-            holder.date.text = items[position].workDate.split("/")[1] + "월 " +
-                    items[position].workDate.split("/")[2] + "일"
-            holder.dday.text = workDday
-            holder.workStartNEnd.text = "%02d".format(startTimeHour)+":"+"%02d".format(startTimeMin)+" ~ "+"%02d".format(endTimeHour)+":"+"%02d".format(endTimeMin)
-            holder.workTime.text = "( ${workTimeHour}시간 "+"%02d".format(workTimeMin)+"분 )"
-        }
+        //xml에 적용하기
+        holder.title.text = items[position].workTitle
+        holder.setName.text = items[position].workSetName
+        holder.date.text = items[position].workDate.split("/")[1] + "월 " +
+                items[position].workDate.split("/")[2] + "일"
+        holder.dday.text = workDday
+        holder.workStartNEnd.text = "%02d".format(startTimeHour)+":"+"%02d".format(startTimeMin)+" ~ "+"%02d".format(endTimeHour)+":"+"%02d".format(endTimeMin)
+        holder.workTime.text = "( ${workTimeHour}시간 "+"%02d".format(workTimeMin)+"분 )"
     }
 }

@@ -56,6 +56,7 @@ class DBManager {
                 WorkInfo(
                     cursor.getInt(cursor.getColumnIndex("wId")),
                     cursor.getString(cursor.getColumnIndex("wTitle")),
+                    cursor.getString(cursor.getColumnIndex("wSetName")),
                     cursor.getString(cursor.getColumnIndex("wDate")),
                     cursor.getString(cursor.getColumnIndex("wStartTime")),
                     cursor.getString(cursor.getColumnIndex("wEndTime")),
@@ -123,6 +124,7 @@ class DBManager {
                 workInfoList.add(WorkInfo(
                     cursor2.getInt(cursor2.getColumnIndex("wId")),
                     cursor2.getString(cursor2.getColumnIndex("wTitle")),
+                    cursor2.getString(cursor2.getColumnIndex("wSetName")),
                     cursor2.getString(cursor2.getColumnIndex("wDate")),
                     cursor2.getString(cursor2.getColumnIndex("wStartTime")),
                     cursor2.getString(cursor2.getColumnIndex("wEndTime")),
@@ -137,7 +139,25 @@ class DBManager {
                 workInfoList
             ))
         }
-        Log.e("test", diaryList.size.toString())
         return diaryList
+    }
+
+    fun getWork(title: String, setName:String):WorkInfo?{
+        val query = "select * from $tableName where wTitle=\"${title}\" and wSetName=\"${setName}\""
+        val cursor = myDatabase.rawQuery(query, null)
+        if(cursor.count!=0) {
+            cursor.moveToFirst()
+            val workInfo = WorkInfo(
+                cursor.getInt(cursor.getColumnIndex("wId")),
+                cursor.getString(cursor.getColumnIndex("wTitle")),
+                cursor.getString(cursor.getColumnIndex("wSetName")),
+                cursor.getString(cursor.getColumnIndex("wDate")),
+                cursor.getString(cursor.getColumnIndex("wStartTime")),
+                cursor.getString(cursor.getColumnIndex("wEndTime")),
+                cursor.getInt(cursor.getColumnIndex("wMoney"))
+            )
+            return workInfo;
+        }
+        return null
     }
 }
