@@ -13,7 +13,7 @@ import kotlin.collections.ArrayList
 
 class WorkForDiaryAdapter(val items:ArrayList<WorkInfo>): RecyclerView.Adapter<WorkForDiaryAdapter.MyViewHolder>() {
     interface  OnItemClickListener{
-        fun OnItemClick(holder: MyViewHolder, view: View, position: Int)
+        fun OnItemClick(holder: MyViewHolder, view: View, position: Int): DiaryAdapter.OnLongItemClickListener?
     }
 
     var itemClickListener: OnItemClickListener?=null

@@ -10,25 +10,33 @@
 
     <LinearLayout
         android:orientation="horizontal"
-        android:gravity="center"
+        android:gravity="left"
+        android:layout_marginLeft="15dp"
         android:padding="15dp"
         android:background="@android:color/transparent"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <ImageView
-            android:background="@android:color/holo_blue_dark"
-            android:src="@drawable/abc_vector_test"
+            android:background="@drawable/ic_workdiary"
             android:layout_marginRight="15dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:layout_width="50dp"
+            android:layout_height="50dp"/>
         <TextView
+            android:fontFamily="@font/nanumgothic_extrabold"
+            android:textSize="23dp"
+            android:textColor="@color/colorBlack"
             android:text="노동일지"
+            android:paddingTop="15dp"
+            android:paddingBottom="10dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
     </LinearLayout>
     <LinearLayout
         android:orientation="vertical"
-        android:layout_margin="30dp"
+        android:layout_marginBottom="15dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:layout_weight="1"
         android:layout_width="match_parent"
         android:layout_height="fill_parent">
         <LinearLayout
@@ -60,9 +68,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
         </LinearLayout>
-        <LinearLayout
+        <FrameLayout
             android:background="@drawable/bottom_rounded_rectangle_white"
-            android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
             <FrameLayout
@@ -70,7 +77,28 @@
                 android:layout_weight="1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
-        </LinearLayout>
-    </LinearLayout>
+            <TextView
+                android:id="@+id/tv_main_comment"
+                android:gravity="center"
+                android:text="새로운 노동일정을 추가해주세요"
+                android:textSize="14sp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
 
+        </FrameLayout>
+    </LinearLayout>
+    <TextView
+        android:id="@+id/tv_main_addBtn"
+        android:background="@drawable/rounded_rectangle_blue"
+        android:fontFamily="@font/nanumgothic_bold"
+        android:text="일정 추가하기"
+        android:textColor="@color/colorBlack"
+        android:textSize="15dp"
+        android:gravity="center"
+        android:padding="10dp"
+        android:layout_marginBottom="15dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
 </LinearLayout>

@@ -87,6 +87,7 @@ class WorkAdapter(val items:ArrayList<WorkInfo>): RecyclerView.Adapter<WorkAdapt
                 items[position].workDate.split("/")[2] + "일"
         holder.dday.text = workDday
         holder.workStartNEnd.text = "%02d".format(startTimeHour)+":"+"%02d".format(startTimeMin)+" ~ "+"%02d".format(endTimeHour)+":"+"%02d".format(endTimeMin)
-        holder.workTime.text = "( ${workTimeHour}시간 "+"%02d".format(workTimeMin)+"분 )"
+        holder.workTime.text = "( " +
+                "${workTimeHour}h "+"%02d".format(workTimeMin)+"m )"
     }
 }

@@ -1,5 +1,6 @@
 package com.example.workdiary.Activity
 
+import android.annotation.SuppressLint
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -8,9 +9,7 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.view.View
-import android.widget.AdapterView
-import android.widget.ArrayAdapter
-import android.widget.AutoCompleteTextView
+import android.widget.*
 import com.example.workdiary.R
 import com.example.workdiary.SQLite.DBManager
 import kotlinx.android.synthetic.main.activity_add_work.*
@@ -45,8 +44,15 @@ class AddWorkActivity : AppCompatActivity() {
         tv_addwork_mon.text = "%02d".format(workMonth.toInt()) + "월"
         tv_addwork_day.text = "%02d".format(workDay.toInt()) + "일"
         tv_addwork_dayofweek.text = "(" + DAY_OF_WEEK[cal.get(Calendar.DAY_OF_WEEK)] + ")"
-        tv_addwork_startTime.text = "%02d".format(cal.get(Calendar.HOUR)) + ":00"
-        tv_addwork_endTime.text = "%02d".format(cal.get(Calendar.HOUR)+1) + ":00"
+        if(cal.get(Calendar.AM_PM)==1){
+            // PM일때
+            tv_addwork_startTime.text = "%02d".format(cal.get(Calendar.HOUR)+12) + ":00"
+            tv_addwork_endTime.text = "%02d".format(cal.get(Calendar.HOUR)+1+12) + ":00"
+        } else {
+            // AM일때
+            tv_addwork_startTime.text = "%02d".format(cal.get(Calendar.HOUR)) + ":00"
+            tv_addwork_endTime.text = "%02d".format(cal.get(Calendar.HOUR)+1) + ":00"
+        }
     }
 
     private fun listenerInit() {
@@ -127,6 +133,7 @@ class AddWorkActivity : AppCompatActivity() {
         startTimeSetListener =
             TimePickerDialog.OnTimeSetListener { view, hourOfDay, minute ->
                 tv_addwork_startTime.text = "%02d".format(hourOfDay)+":"+"%02d".format(minute)
+                tv_addwork_endTime.text = "%02d".format(hourOfDay+1)+":"+"%02d".format(minute)
             }
         endTimeSetListener =
             TimePickerDialog.OnTimeSetListener { view, hourOfDay, minute ->
@@ -139,8 +146,8 @@ class AddWorkActivity : AppCompatActivity() {
             TimePickerDialog(this,
                 android.R.style.Theme_Holo_Light_Dialog,
                 startTimeSetListener,
-                Calendar.getInstance().get(Calendar.HOUR_OF_DAY),
-                Calendar.getInstance().get(Calendar.MINUTE),
+                tv_addwork_startTime.text.toString().split(":")[0].toInt(),
+                tv_addwork_startTime.text.toString().split(":")[1].toInt(),
                 android.text.format.DateFormat.is24HourFormat(this)
             ).show()
         }
@@ -148,8 +155,8 @@ class AddWorkActivity : AppCompatActivity() {
             TimePickerDialog(this,
                 android.R.style.Theme_Holo_Light_Dialog,
                 endTimeSetListener,
-                Calendar.getInstance().get(Calendar.HOUR_OF_DAY),
-                Calendar.getInstance().get(Calendar.MINUTE),
+                tv_addwork_endTime.text.toString().split(":")[0].toInt(),
+                tv_addwork_endTime.text.toString().split(":")[1].toInt(),
                 android.text.format.DateFormat.is24HourFormat(this)
             ).show()
         }

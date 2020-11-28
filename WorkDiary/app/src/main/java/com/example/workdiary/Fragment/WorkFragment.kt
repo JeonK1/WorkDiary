@@ -15,10 +15,12 @@ import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.workdiary.Activity.AddWorkActivity
+import com.example.workdiary.Activity.MainActivity
 import com.example.workdiary.Adapter.WorkAdapter
 import com.example.workdiary.R
 import com.example.workdiary.SQLite.DBManager
 import kotlinx.android.synthetic.main.dialog_box.view.*
+import kotlinx.android.synthetic.main.fragment_work.*
 import java.util.*
 
 /**
@@ -49,13 +51,15 @@ class WorkFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         recyclerViewInit()
-        buttonInit(view)
     }
 
-    private fun buttonInit(view: View) {
-        view.findViewById<TextView>(R.id.tv_work_addBtn).setOnClickListener {
-            val intent = Intent(context, AddWorkActivity::class.java)
-            startActivity(intent)
+    private fun textViewInit() {
+        if(workAdapter.items.size!=0) {
+            activity!!.findViewById<TextView>(R.id.tv_main_comment).text = "새로운 노동일정을 추가해주세요"
+            activity!!.findViewById<TextView>(R.id.tv_main_comment).visibility = View.INVISIBLE
+        } else {
+            activity!!.findViewById<TextView>(R.id.tv_main_comment).text = "새로운 노동일정을 추가해주세요"
+            activity!!.findViewById<TextView>(R.id.tv_main_comment).visibility = View.VISIBLE
         }
     }
 
@@ -95,7 +99,6 @@ class WorkFragment : Fragment() {
                 val mDialogView = LayoutInflater.from(this@WorkFragment.context!!).inflate(R.layout.dialog_box, null)
                 val mBuilder = AlertDialog.Builder(this@WorkFragment.context!!).setView(mDialogView)
                 val mAlertDialog = mBuilder.show()
-                mAlertDialog.setCanceledOnTouchOutside(false)
                 mAlertDialog.window!!.setGravity(Gravity.CENTER)
                 mDialogView.tv_dialog_title.setText("노동일정 제거")
                 mDialogView.tv_dialog_context.setText("${holder.date.text.toString()}의 ${holder.title.text.toString()} 노동 일정을 제거할까요??")
@@ -119,7 +122,6 @@ class WorkFragment : Fragment() {
                 val mDialogView = LayoutInflater.from(this@WorkFragment.context!!).inflate(R.layout.dialog_box, null)
                 val mBuilder = AlertDialog.Builder(this@WorkFragment.context!!).setView(mDialogView)
                 val mAlertDialog = mBuilder.show()
-                mAlertDialog.setCanceledOnTouchOutside(false)
                 mAlertDialog.window!!.setGravity(Gravity.CENTER)
                 mDialogView.tv_dialog_title.setText("노동 완료")
                 mDialogView.tv_dialog_context.setText("노동 기록을 일지로 옮길까요??")
@@ -138,6 +140,7 @@ class WorkFragment : Fragment() {
             }
         }
         workRecyclerView.adapter = workAdapter
+        textViewInit()
     }
 
 }

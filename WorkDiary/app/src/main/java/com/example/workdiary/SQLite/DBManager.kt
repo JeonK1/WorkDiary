@@ -104,7 +104,7 @@ class DBManager {
 
     fun getDiaryAll(): ArrayList<DiaryInfo>{
         // 연도/달 단위가 뭐가 있는지 다 불러오기
-        val query = "select substr(wDate,0,8) from $tableName group by substr(wDate,0,8)  order by wDate DESC"
+        val query = "select substr(wDate,0,8) from $tableName where wIsDone=1 group by substr(wDate,0,8)  order by wDate DESC"
         val cursor = myDatabase.rawQuery(query, null)
         cursor.moveToFirst()
         val diaryMonthList = ArrayList<String>()
@@ -117,7 +117,7 @@ class DBManager {
         for(i in 0 until diaryMonthList.size){
             // 연도/달 에 따른 모든 알바내용 가져와서 workInfoList로 만들어주기
             val workInfoList = ArrayList<WorkInfo>()
-            val query2 = "select * from worktable where wDate like '${diaryMonthList[i]}%' and wIsDone=1"
+            val query2 = "select * from $tableName where wDate like '${diaryMonthList[i]}%' and wIsDone=1"
             val cursor2 = myDatabase.rawQuery(query2, null)
             cursor2.moveToFirst()
             while(!cursor2.isAfterLast){

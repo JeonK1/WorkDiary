@@ -76,7 +76,7 @@
             <TextView
                 android:id="@+id/tv_itemwork_workTime"
                 android:fontFamily="@font/nanumgothic"
-                android:text="( 7시간 30분 )"
+                android:text="(7시간 30분)"
                 android:textColor="@color/colorBlack"
                 android:textSize="14dp"
                 android:layout_width="wrap_content"
@@ -93,10 +93,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <TextView
-            android:id="@+id/tv_itemwork_delete"
-            android:background="@color/colorPastelRed"
+            android:id="@+id/tv_itemwork_okBtn"
+            android:background="@color/colorPastelBlue"
             android:fontFamily="@font/nanumgothic"
-            android:text="삭제"
+            android:text="확인"
             android:textSize="14dp"
             android:textColor="@color/colorBlack"
             android:gravity="center"
@@ -105,10 +105,10 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
         <TextView
-            android:id="@+id/tv_itemwork_okBtn"
-            android:background="@color/colorPastelBlue"
+            android:id="@+id/tv_itemwork_delete"
+            android:background="@color/colorPastelRed"
             android:fontFamily="@font/nanumgothic"
-            android:text="확인"
+            android:text="삭제"
             android:textSize="14dp"
             android:textColor="@color/colorBlack"
             android:gravity="center"
