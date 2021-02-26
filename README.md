@@ -10,6 +10,11 @@
 <img src="/readme_img/2.png" width=600 />
 <br>
 <br><br>
+<h2>코드파일 구성</h2>
+<img src="/readme_img/4.png" width=600 />
+- MVC의 디자인 패턴으로 코드가 작성되으며, 각 파일별 연결관계는 다음과 같다.
+<br>
+<br><br>
 <h2>실행 화면</h2>
 <img src="/readme_img/3.png" width=800 />
 <br><br>
