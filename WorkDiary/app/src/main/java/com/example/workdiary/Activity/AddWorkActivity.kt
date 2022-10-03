@@ -1,193 +1,227 @@
-package com.example.workdiary.Activity
+package com.example.workdiary.activity
 
-import android.annotation.SuppressLint
+import android.app.Activity
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
-import android.view.View
-import android.widget.*
+import android.widget.ArrayAdapter
+import androidx.lifecycle.ViewModelProvider
 import com.example.workdiary.R
-import com.example.workdiary.SQLite.DBManager
+import com.example.workdiary.viewmodel.AddWorkViewModel
+import com.example.workdiary.viewmodel.AddWorkViewModelFactory
 import kotlinx.android.synthetic.main.activity_add_work.*
-import java.text.SimpleDateFormat
 import java.util.*
 
 class AddWorkActivity : AppCompatActivity() {
+    companion object {
+        val DAY_OF_WEEK = arrayListOf("", "일", "월", "화", "수", "목", "금", "토")
+        const val LOWEST_MONEY = 8590 // 최저시급
+        const val ADD_WORK_VALUE = "NEW_WORK"
+    }
 
-    val DAY_OF_WEEK: ArrayList<String> = arrayListOf("", "일", "월", "화", "수", "목", "금", "토")
-    lateinit var dateSetListener:DatePickerDialog.OnDateSetListener
-    lateinit var startTimeSetListener:TimePickerDialog.OnTimeSetListener
-    lateinit var endTimeSetListener:TimePickerDialog.OnTimeSetListener
-    var workYear=""
-    var workMonth=""
-    var workDay=""
+    private lateinit var dateSetListener: DatePickerDialog.OnDateSetListener
+    private lateinit var startTimeSetListener: TimePickerDialog.OnTimeSetListener
+    private lateinit var endTimeSetListener: TimePickerDialog.OnTimeSetListener
+    private lateinit var addWorkViewModel: AddWorkViewModel
+    private val cal = Calendar.getInstance()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_work)
-        defaultInit()
+        viewModelInit()
         listenerInit()
-        initAutoCompleteText()
-        pickerInit()
-        buttonInit()
+        actvInit()
     }
 
-    private fun defaultInit() {
-        val cal = Calendar.getInstance()
-        workYear=cal.get(Calendar.YEAR).toString()
-        workMonth=(cal.get(Calendar.MONTH)+1).toString()
-        workDay=cal.get(Calendar.DAY_OF_MONTH).toString()
-        tv_addwork_mon.text = "%02d".format(workMonth.toInt()) + "월"
-        tv_addwork_day.text = "%02d".format(workDay.toInt()) + "일"
-        tv_addwork_dayofweek.text = "(" + DAY_OF_WEEK[cal.get(Calendar.DAY_OF_WEEK)] + ")"
-        if(cal.get(Calendar.AM_PM)==1){
-            // PM일때
-            tv_addwork_startTime.text = "%02d".format(cal.get(Calendar.HOUR)+12) + ":00"
-            tv_addwork_endTime.text = "%02d".format(cal.get(Calendar.HOUR)+1+12) + ":00"
-        } else {
-            // AM일때
-            tv_addwork_startTime.text = "%02d".format(cal.get(Calendar.HOUR)) + ":00"
-            tv_addwork_endTime.text = "%02d".format(cal.get(Calendar.HOUR)+1) + ":00"
-        }
+    private fun viewModelInit() {
+        // viewModel 만들어주기
+        addWorkViewModel =
+            ViewModelProvider(this, AddWorkViewModelFactory(application)).get(
+                AddWorkViewModel::class.java
+            )
+
+        // date 값 변경 시
+        addWorkViewModel.getDateLiveData().observe(this, { date_str ->
+            // wDate update
+            val newWork = addWorkViewModel.getNewWork().also {
+                it.wDate = date_str
+            }
+            addWorkViewModel.setNewWork(newWork)
+
+            // textView update
+            val year = date_str.split("/")[0].toInt()
+            val month = date_str.split("/")[1].toInt()
+            val date = date_str.split("/")[2].toInt()
+            cal.set(year, month, date)
+            tv_addwork_pickDate.text =
+                "${"%02d".format(month)}월 ${"%02d".format(date)}일 (${DAY_OF_WEEK[cal.get(Calendar.DAY_OF_WEEK)]})"
+        })
+
+        // startTime 값 변경 시
+        addWorkViewModel.getStartTimeLiveData().observe(this, { time_str ->
+            // wStartTime update
+            val newWork = addWorkViewModel.getNewWork().also {
+                it.wStartTime = time_str
+            }
+            addWorkViewModel.setNewWork(newWork)
+
+            // textView update
+            val time = time_str.split(":")[0].toInt()
+            val min = time_str.split(":")[1].toInt()
+            tv_addwork_pickStartTime.text = "${"%02d".format(time)}:${"%02d".format(min)}"
+        })
+
+        // endTime 값 변경 시
+        addWorkViewModel.getEndTimeLiveData().observe(this, { time_str ->
+            // wEndTime update
+            val newWork = addWorkViewModel.getNewWork().also {
+                it.wEndTime = time_str
+            }
+            addWorkViewModel.setNewWork(newWork)
+
+            // textView update
+            val time = time_str.split(":")[0].toInt()
+            val min = time_str.split(":")[1].toInt()
+            tv_addwork_pickEndTime.text = "${"%02d".format(time)}:${"%02d".format(min)}"
+        })
     }
 
     private fun listenerInit() {
-        act_addwork_title.addTextChangedListener(object : TextWatcher {
-            override fun afterTextChanged(s: Editable?) {
-                // 세트입력 autoCompleteListener에 List 추가
-                val dbManager = DBManager(applicationContext)
-                val setNameList = dbManager.getSetNameAll(act_addwork_title.text.toString())
-                if(setNameList.size>0) {
-                    // title에 적은게 db에 잇는거면 set쪽에 List 적용하기
-                    val adapter = ArrayAdapter(
-                        applicationContext,
-                        android.R.layout.simple_dropdown_item_1line,
-                        setNameList
-                    )
-                    act_addwork_set.setAdapter(adapter)
-                } else {
-                    // title에 적은게 db에 없으며 set쪽에 빈List 적용하기
-                    val emptyAdapter = ArrayAdapter(
-                        applicationContext,
-                        android.R.layout.simple_dropdown_item_1line,
-                        ArrayList<String>()
-                    )
-                    act_addwork_set.setAdapter(emptyAdapter)
-                }
-            }
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-            }
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-            }
-        })
-        act_addwork_set.addTextChangedListener(object : TextWatcher{
-            override fun afterTextChanged(s: Editable?) {
-                val dbManager = DBManager(applicationContext)
-                val curTitle = act_addwork_title.text.toString()
-                val curSet = act_addwork_set.text.toString()
-                val workInfo = dbManager.getWork(curTitle, curSet)
-                if(workInfo!=null) {
-                    tv_addwork_startTime.text = "%02d".format(workInfo?.workStartTime.split(":")[0].toInt()) + ":" +
-                            "%02d".format(workInfo?.workStartTime.split(":")[1].toInt())
-                    tv_addwork_endTime.text = "%02d".format(workInfo?.workEndTime.split(":")[0].toInt()) + ":" +
-                            "%02d".format(workInfo?.workEndTime.split(":")[1].toInt())
-                    et_addwork_money.setText(workInfo.workMoney.toString())
-                }
-            }
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-            }
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-            }
-        })
-    }
-
-    private fun initAutoCompleteText() {
-        val dbManager = DBManager(applicationContext)
-        val workNameList = dbManager.getWorkNameAll()
-        val adapter = ArrayAdapter(
-            applicationContext,
-            android.R.layout.simple_dropdown_item_1line,
-            workNameList
-        )
-        act_addwork_title.setAdapter(adapter)
-    }
-
-    private fun pickerInit() {
+        // datePicker, timePicker 초기값 Init
         dateSetListener =
-            DatePickerDialog.OnDateSetListener { view, year, monthOfYear, dayOfMonth ->
-                val cal = Calendar.getInstance()
-                cal.set(Calendar.YEAR, year)
-                cal.set(Calendar.MONTH, monthOfYear)
-                cal.set(Calendar.DAY_OF_MONTH, dayOfMonth)
-                workYear = cal.get(Calendar.YEAR).toString()
-                workMonth = (cal.get(Calendar.MONTH) + 1).toString()
-                workDay = cal.get(Calendar.DAY_OF_MONTH).toString()
-                tv_addwork_mon.text = "%02d".format(workMonth.toInt()) + "월"
-                tv_addwork_day.text = "%02d".format(workDay.toInt()) + "일"
-                tv_addwork_dayofweek.text = "(" + DAY_OF_WEEK[cal.get(Calendar.DAY_OF_WEEK)] + ")"
+            DatePickerDialog.OnDateSetListener { view, year, month, dayOfMonth ->
+                // 날짜 설정 완료 시
+                addWorkViewModel.getDateLiveData().value =
+                    "${"%02d".format(year)}/${"%02d".format(month)}/${"%02d".format(dayOfMonth)}"
             }
         startTimeSetListener =
             TimePickerDialog.OnTimeSetListener { view, hourOfDay, minute ->
-                tv_addwork_startTime.text = "%02d".format(hourOfDay)+":"+"%02d".format(minute)
-                tv_addwork_endTime.text = "%02d".format(hourOfDay+1)+":"+"%02d".format(minute)
+                // 시작시간 설정 완료 시
+                addWorkViewModel.getStartTimeLiveData().value =
+                    "${"%02d".format(hourOfDay)}:${"%02d".format(minute)}"
             }
         endTimeSetListener =
             TimePickerDialog.OnTimeSetListener { view, hourOfDay, minute ->
-                tv_addwork_endTime.text = "%02d".format(hourOfDay)+":"+"%02d".format(minute)
+                // 끝시간 설정 완료 시
+                addWorkViewModel.getEndTimeLiveData().value =
+                    "${"%02d".format(hourOfDay)}:${"%02d".format(minute)}"
             }
-    }
 
-    private fun buttonInit() {
-        ll_addwork_pickStartTime.setOnClickListener {
+        // click Listener Init
+        tv_addwork_pickDate.setOnClickListener {
+            // 날짜 설정
+            val date_str = addWorkViewModel.getDateLiveData().value!!
+            DatePickerDialog(this,
+                dateSetListener,
+                date_str.split("/")[0].toInt(),
+                date_str.split("/")[1].toInt(),
+                date_str.split("/")[2].toInt(),
+            ).show()
+        }
+
+        tv_addwork_pickStartTime.setOnClickListener {
+            // 시작시간
+            val time_str = addWorkViewModel.getStartTimeLiveData().value!!
             TimePickerDialog(this,
                 android.R.style.Theme_Holo_Light_Dialog,
                 startTimeSetListener,
-                tv_addwork_startTime.text.toString().split(":")[0].toInt(),
-                tv_addwork_startTime.text.toString().split(":")[1].toInt(),
+                time_str.split(":")[0].toInt(), // hour
+                time_str.split(":")[1].toInt(), // minute
                 android.text.format.DateFormat.is24HourFormat(this)
             ).show()
         }
-        ll_addwork_pickEndTime.setOnClickListener {
+
+        tv_addwork_pickEndTime.setOnClickListener {
+            // 끝시간
+            val time_str = addWorkViewModel.getStartTimeLiveData().value!!
             TimePickerDialog(this,
                 android.R.style.Theme_Holo_Light_Dialog,
                 endTimeSetListener,
-                tv_addwork_endTime.text.toString().split(":")[0].toInt(),
-                tv_addwork_endTime.text.toString().split(":")[1].toInt(),
+                time_str.split(":")[0].toInt(), // hour
+                time_str.split(":")[1].toInt(), // minute
                 android.text.format.DateFormat.is24HourFormat(this)
             ).show()
         }
-        ll_addwork_pickDate.setOnClickListener {
-            DatePickerDialog(this,
-                dateSetListener,
-                Calendar.getInstance().get(Calendar.YEAR),
-                Calendar.getInstance().get(Calendar.MONTH),
-                Calendar.getInstance().get(Calendar.DAY_OF_MONTH)
-            ).show()
-        }
+
         btn_addwork_inputLowestMoney.setOnClickListener {
-            et_addwork_money.setText("8590")
+            // 최저시급
+            et_addwork_money.setText(LOWEST_MONEY.toString())
         }
+
         tv_addwork_saveBtn.setOnClickListener {
-            val dbManager = DBManager(applicationContext)
-            val workTitle = act_addwork_title.text.toString()
-            val workSet = act_addwork_set.text.toString()
-            val workDate = "$workYear/${"%02d".format(workMonth.toInt())}/${"%02d".format(workDay.toInt())}"
-            val workStartTime = tv_addwork_startTime.text.toString()
-            val workEndTime = tv_addwork_endTime.text.toString()
-            val workMoney = et_addwork_money.text.toString().toInt()
-            dbManager.addWork(workTitle, workSet, workDate, workStartTime, workEndTime, workMoney)
+            val newWork = addWorkViewModel.getNewWork().also {
+                // wTitle, wSetName, wMoney update
+                it.wTitle = act_addwork_title.text.toString()
+                it.wSetName = act_addwork_set.text.toString()
+                it.wMoney = et_addwork_money.text.toString().toInt()
+            }
+            val bundle = Bundle().apply {
+                putSerializable(ADD_WORK_VALUE, newWork)
+            }
+            val intent = Intent().apply {
+                putExtras(bundle)
+            }
+            setResult(Activity.RESULT_OK, intent)
             finish()
         }
+
         ib_addwork_backBtn.setOnClickListener {
+            // 뒤로가기 버튼
+            setResult(Activity.RESULT_CANCELED)
             finish()
         }
     }
-}
 
-private operator fun AdapterView.OnItemClickListener.invoke(onItemClickListener: AdapterView.OnItemClickListener) {
+    private fun actvInit() {
+        // AutoCompleteTextView 관련 Init
+        // title 관련 AutoCOmpleteTextView에 모든 title stringList 적용
+        act_addwork_title.setAdapter(
+            ArrayAdapter(
+                applicationContext,
+                android.R.layout.simple_dropdown_item_1line,
+                addWorkViewModel.getTitleNames()
+            )
+        )
 
+        // title이 변하였을 때, 해당 title에 해당하는 setName 가져와서 set 관련 AutoCompleteTextView에 적용
+        act_addwork_title.addTextChangedListener(object : TextWatcher{
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+            }
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+            }
+            override fun afterTextChanged(s: Editable?) {
+                val wTitle = s.toString()
+                act_addwork_set.setAdapter(
+                    ArrayAdapter(
+                        applicationContext,
+                        android.R.layout.simple_dropdown_item_1line,
+                        addWorkViewModel.getSetNames(wTitle)
+                    )
+                )
+            }
+        })
+
+        // title과 setName에 해당하는 Work 값이 존재하면, 해당 내용을 startTime, endTime, money 에 적용하기
+        act_addwork_set.addTextChangedListener(object : TextWatcher{
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+            }
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+            }
+            override fun afterTextChanged(s: Editable?) {
+                val wTitle = act_addwork_title.text.toString()
+                val wSetName = s.toString()
+                val works = addWorkViewModel.getWorks(wTitle, wSetName)
+                if(works.isNotEmpty()){
+                    // wStartTime, wEndTime, wMoney setting
+                    tv_addwork_pickStartTime.text = works[0].wStartTime
+                    tv_addwork_pickEndTime.text = works[0].wEndTime
+                    et_addwork_money.setText(works[0].wMoney.toString())
+                }
+            }
+        })
+    }
 }

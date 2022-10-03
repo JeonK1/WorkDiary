@@ -1,13 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-
-    <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
-        <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
+    <style name="style_normal_comment">
+        <item name="android:fontFamily">@font/nanumgothic</item>
+        <item name="android:textSize">15dp</item>
+        <item name="android:textColor">@color/colorDarkGray</item>
     </style>
-    <style name="TimePickerSpinner" parent="android:Widget.Material.Light.TimePicker">
-        <item name="android:timePickerMode">spinner</item>
+    <style name="style_normal_context">
+        <item name="android:fontFamily">@font/nanumgothic</item>
+        <item name="android:textSize">17dp</item>
+        <item name="android:textColor">@color/colorBlack</item>
+    </style>
+    <style name="style_bold_title_big">
+        <item name="android:fontFamily">@font/nanumgothic_extrabold</item>
+        <item name="android:textSize">23dp</item>
+        <item name="android:textColor">@color/colorBlack</item>
+    </style>
+    <style name="style_bold_context">
+        <item name="android:fontFamily">@font/nanumgothic_bold</item>
+        <item name="android:textSize">17dp</item>
+        <item name="android:textColor">@color/colorBlack</item>
+    </style>
+    <style name="style_normal_bottom">
+        <item name="android:fontFamily">@font/nanumgothic</item>
+        <item name="android:textSize">17dp</item>
+        <item name="android:textColor">@color/colorBlack</item>
+        <item name="android:background">@drawable/rounded_rectangle_black_stroke</item>
+    </style>
+    <style name="style_bottom_button_blue">
+        <item name="android:fontFamily">@font/nanumgothic_extrabold</item>
+        <item name="android:textSize">17dp</item>
+        <item name="android:textColor">@color/colorBlack</item>
+        <item name="android:background">@color/colorPastelBlue</item>
+    </style>
+    <style name="style_bottom_rounded_button_blue">
+        <item name="android:fontFamily">@font/nanumgothic_extrabold</item>
+        <item name="android:textSize">17dp</item>
+        <item name="android:textColor">@color/colorBlack</item>
+        <item name="android:background">@drawable/rounded_rectangle_blue</item>
+    </style>
+    <style name="style_bottom_button_red">
+        <item name="android:fontFamily">@font/nanumgothic_extrabold</item>
+        <item name="android:textSize">17dp</item>
+        <item name="android:textColor">@color/colorBlack</item>
+        <item name="android:background">@color/colorPastelRed</item>
     </style>
 </resources>
