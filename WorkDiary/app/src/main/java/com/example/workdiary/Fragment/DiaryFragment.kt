@@ -1,4 +1,4 @@
-package com.example.workdiary.Fragment
+package com.example.workdiary.fragment
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -6,58 +6,99 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import android.widget.Toast
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.workdiary.Adapter.DiaryAdapter
-import com.example.workdiary.Adapter.WorkForDiaryAdapter
-import com.example.workdiary.Model.DiaryInfo
 import com.example.workdiary.R
-import com.example.workdiary.Model.WorkInfo
-import com.example.workdiary.SQLite.DBManager
+import com.example.workdiary.adapter.DiaryAdapter
+import com.example.workdiary.adapter.WorkAdapter
+import com.example.workdiary.data.DiaryInfo
+import com.example.workdiary.viewmodel.DiaryViewModel
+import com.example.workdiary.viewmodel.DiaryViewModelFactory
+import com.example.workdiary.viewmodel.WorkViewModel
 
-/**
- * A simple [Fragment] subclass.
- */
 class DiaryFragment : Fragment() {
-
-    lateinit var diaryRecyclerView: RecyclerView
+    lateinit var diaryViewModel: DiaryViewModel
     lateinit var diaryAdapter: DiaryAdapter
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        var root = inflater.inflate(R.layout.fragment_work, container, false)
-        diaryRecyclerView = root.findViewById(R.id.rv_work_recyclerView)
-        return root
+        return inflater.inflate(R.layout.fragment_diary, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        recyclerViewInit()
+        recyclerViewInit(view)
+        viewModelInit()
     }
 
-    private fun textViewInit() {
-        if(diaryAdapter.items.size!=0) {
-            activity!!.findViewById<TextView>(R.id.tv_main_comment).text = "아직 완료된 노동일정이 없어요"
-            activity!!.findViewById<TextView>(R.id.tv_main_comment).visibility = View.INVISIBLE
-        } else {
-            activity!!.findViewById<TextView>(R.id.tv_main_comment).text = "아직 완료된 노동일정이 없어요"
-            activity!!.findViewById<TextView>(R.id.tv_main_comment).visibility = View.VISIBLE
-        }
-    }
-    private fun recyclerViewInit() {
-        val dbManager = DBManager(context!!)
-        val workList = dbManager.getDiaryAll()
-
-        diaryRecyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
-        diaryAdapter = DiaryAdapter(workList)
-        diaryRecyclerView.adapter = diaryAdapter
-
-        textViewInit()
+    private fun recyclerViewInit(view:View) {
+        // recyclerView 초기화
+        val recyclerView = view.findViewById<RecyclerView>(R.id.rv_diary_recyclerView)
+        recyclerView.layoutManager =
+            LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+        diaryAdapter = DiaryAdapter(listOf()) // empty list adapter
+        recyclerView.adapter = diaryAdapter
     }
 
+    private fun viewModelInit() {
+        // viewModel 설정
+        diaryViewModel =
+            ViewModelProvider(this, DiaryViewModelFactory(requireActivity().application)).get(
+                DiaryViewModel::class.java
+            )
+        diaryViewModel.getAllDiaryInfo().observe(viewLifecycleOwner, Observer { work_sort_by_date ->
+            // List<Work> to List<DiaryInfo>
+            val diaryList = mutableListOf<DiaryInfo>()
+            var idx=-1
+            for (work in work_sort_by_date){
+                val cur_year = work.wDate.split("/")[0].toInt()
+                val cur_month = work.wDate.split("/")[1].toInt()
+                if(idx==-1){
+                    // 첫 index
+                    diaryList.add(
+                        DiaryInfo(
+                            cur_year,
+                            cur_month,
+                            work
+                        )
+                    )
+                    idx++
+                } else if(diaryList[idx].year != cur_year || diaryList[idx].month != cur_month) {
+                    // year/month 가 변함, 새로운 DiaryInfo 추가
+                    diaryList.add(
+                        DiaryInfo(
+                            cur_year,
+                            cur_month,
+                            work
+                        )
+                    )
+                    idx++
+                } else {
+                    // 다음 index의 year/month 가 변하지 않았을 때
+                    diaryList[idx].workList.add(work)
+                }
+            }
+
+            // set recyclerView
+            if(diaryList.isNotEmpty()){
+                // item 존재
+                requireActivity().findViewById<TextView>(R.id.tv_main_comment).text = "아직 완료된 노동일정이 없어요"
+                requireActivity().findViewById<TextView>(R.id.tv_main_comment).visibility = View.INVISIBLE
+                diaryAdapter.setDiaryList(diaryList)
+            } else {
+                // item 존재하지 않음
+                requireActivity().findViewById<TextView>(R.id.tv_main_comment).text = "아직 완료된 노동일정이 없어요"
+                requireActivity().findViewById<TextView>(R.id.tv_main_comment).visibility = View.VISIBLE
+            }
+        })
+    }
 
 }
