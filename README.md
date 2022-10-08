@@ -5,6 +5,7 @@ WorkDiary MVVM
 - Android Kotlin <br>
 - Room database를 활용하여 데이터 관리 <br>
 - Room + LiveData + ViewModel 을 활용한 MVVM 아키텍쳐 구현
+- AsyncTask 로 비동기 
 <br><br>
 <br><br>
 <h2>프로젝트 개요</h2>
