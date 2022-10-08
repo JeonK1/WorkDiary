@@ -3,15 +3,22 @@
     package="com.example.workdiary">
 
     <application
+        android:name=".WorkDiaryApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
-        <activity android:name=".activity.AddWorkActivity"
-            android:windowSoftInputMode="adjustResize"></activity>
-        <activity android:name=".activity.MainActivity">
+
+        <activity
+            android:name=".activity.AddWorkActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+
+        <activity
+            android:name=".activity.MainActivity"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

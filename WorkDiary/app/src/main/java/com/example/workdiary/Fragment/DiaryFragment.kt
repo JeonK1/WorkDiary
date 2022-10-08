@@ -6,25 +6,21 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.workdiary.R
 import com.example.workdiary.adapter.DiaryAdapter
-import com.example.workdiary.adapter.WorkAdapter
 import com.example.workdiary.data.DiaryInfo
 import com.example.workdiary.viewmodel.DiaryViewModel
-import com.example.workdiary.viewmodel.DiaryViewModelFactory
-import com.example.workdiary.viewmodel.WorkViewModel
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class DiaryFragment : Fragment() {
-    lateinit var diaryViewModel: DiaryViewModel
+    private val diaryViewModel: DiaryViewModel by viewModels()
     lateinit var diaryAdapter: DiaryAdapter
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -49,11 +45,6 @@ class DiaryFragment : Fragment() {
     }
 
     private fun viewModelInit() {
-        // viewModel 설정
-        diaryViewModel =
-            ViewModelProvider(this, DiaryViewModelFactory(requireActivity().application)).get(
-                DiaryViewModel::class.java
-            )
         diaryViewModel.getAllDiaryInfo().observe(viewLifecycleOwner, Observer { work_sort_by_date ->
             // List<Work> to List<DiaryInfo>
             val diaryList = mutableListOf<DiaryInfo>()
@@ -100,5 +91,4 @@ class DiaryFragment : Fragment() {
             }
         })
     }
-
 }

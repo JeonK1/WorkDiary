@@ -3,7 +3,11 @@ package com.example.workdiary.data
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.example.workdiary.common.DATE_FORMAT
+import com.example.workdiary.common.DayOfWeek
+import com.example.workdiary.common.TIME_FORMAT
 import java.io.Serializable
+import java.util.*
 
 @Entity
 data class Work(
@@ -19,10 +23,37 @@ data class Work(
     constructor(
         wTitle: String,
         wSetName: String,
-        wDate: String,
-        wStartTime: String,
-        wEndTime: String,
+        wDate: Date,
+        wStartTime: Time,
+        wEndTime: Time,
         wMoney: Int,
         wIsDone: Int
-    ) : this(0, wTitle, wSetName, wDate, wStartTime, wEndTime, wMoney, wIsDone)
+    ) : this(
+        0,
+        wTitle,
+        wSetName,
+        Date(wDate.year, wDate.month, wDate.day).toString(),
+        Time(wStartTime.hour, wStartTime.minute).toString(),
+        Time(wEndTime.hour, wEndTime.minute).toString(),
+        wMoney,
+        wIsDone
+    )
+
+    // parsed by DATE_FORMAT (@see com.example.workdiary.common.Const)
+    val year get() = wDate.split("/")[0].toIntOrNull()
+    val month get() = wDate.split("/")[1].toIntOrNull()
+    val day get() = wDate.split("/")[2].toIntOrNull()
+    val dayOfWeek get() = if (year != null && month != null && day != null) {
+        Calendar.getInstance().apply {
+            set(year!!, month!!, day!!)
+        }.DayOfWeek
+    } else {
+        null
+    }
+
+    // parsed by TIME_FORMAT (@see com.example.workdiary.common.Const)
+    val startHour get() = wStartTime.split(":")[0].toIntOrNull()
+    val startMinute get() = wStartTime.split(":")[1].toIntOrNull()
+    val endHour get() = wEndTime.split(":")[0].toIntOrNull()
+    val endMinute get() = wEndTime.split(":")[1].toIntOrNull()
 }

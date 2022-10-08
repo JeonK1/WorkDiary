@@ -4,17 +4,18 @@ import android.app.Application
 import android.os.AsyncTask
 import android.util.Log
 import androidx.lifecycle.LiveData
+import com.example.workdiary.WorkDiaryApplication
+import javax.inject.Inject
 
-class WorkRepository(application: Application) {
+class WorkRepository @Inject constructor(
+    private val workDao: WorkDao
+) {
     companion object {
-        lateinit var workDao: WorkDao
         lateinit var allWorks: LiveData<List<Work>>
         lateinit var allDiary: LiveData<List<Work>>
     }
 
     init {
-        val database = WorkDatabase.getInstance(application)
-        workDao = database.workDao()
         allWorks = workDao.getWorkInfoAll()
         allDiary = workDao.getDiaryInfoAll()
     }

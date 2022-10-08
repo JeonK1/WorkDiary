@@ -14,27 +14,24 @@ import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.workdiary.R
 import com.example.workdiary.viewmodel.WorkViewModel
-import com.example.workdiary.viewmodel.WorkViewModelFactory
 import com.example.workdiary.activity.AddWorkActivity
 import com.example.workdiary.activity.MainActivity
 import com.example.workdiary.adapter.WorkAdapter
 import com.example.workdiary.data.Work
-import kotlinx.android.synthetic.main.activity_main.*
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.dialog_box.view.*
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class WorkFragment : Fragment() {
-    lateinit var workViewModel: WorkViewModel
+    private val workViewModel: WorkViewModel by viewModels()
     lateinit var workAdapter: WorkAdapter
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -60,11 +57,6 @@ class WorkFragment : Fragment() {
     }
 
     private fun viewModelInit() {
-        // ViewModel 설정
-        workViewModel =
-            ViewModelProvider(this, WorkViewModelFactory(requireActivity().application)).get(
-                WorkViewModel::class.java
-            )
         workViewModel.getAllWork().observe(viewLifecycleOwner, Observer { works ->
             if(works.isNotEmpty()){
                 // item 존재

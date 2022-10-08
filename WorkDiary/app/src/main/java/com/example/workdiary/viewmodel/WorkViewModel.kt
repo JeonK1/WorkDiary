@@ -1,16 +1,16 @@
 package com.example.workdiary.viewmodel
 
-import android.app.Application
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import com.example.workdiary.data.Work
 import com.example.workdiary.data.WorkRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
-class WorkViewModel(application: Application): ViewModel() {
-    private val repository by lazy {
-        WorkRepository(application)
-    }
-
+@HiltViewModel
+class WorkViewModel @Inject constructor(
+    private val repository: WorkRepository
+): ViewModel() {
     private val allWorks: LiveData<List<Work>> by lazy {
         repository.getAllWorks()
     }

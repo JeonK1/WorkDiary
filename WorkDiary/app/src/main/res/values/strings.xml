@@ -1,5 +1,19 @@
 <resources>
     <string name="app_name">WorkDiary</string>
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string name="add_work_title">일정 추가 버튼</string>
+    <string name="no_work">새로운 노동일정을 추가해주세요</string>
+    <string name="diary">일지</string>
+    <string name="work">노동</string>
+    <string name="workdiary">노동일지</string>
+
+    <string name="date_format">%02d월 %02d일 (%s)</string>
+    <string name="time_format">%02d:%02d</string>
+    <string name="write_lowest_money">최저시급 입력</string>
+    <string name="money_per_hour">시급</string>
+    <string name="won">원</string>
+    <string name="work_name">노동 이름</string>
+    <string name="set_name">세트 이름</string>
+    <string name="until_code">~</string>
 </resources>

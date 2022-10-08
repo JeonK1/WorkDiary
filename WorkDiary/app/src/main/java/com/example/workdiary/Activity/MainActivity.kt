@@ -5,74 +5,60 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import androidx.activity.viewModels
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import com.example.workdiary.R
+import com.example.workdiary.common.replaceFragment
+import com.example.workdiary.databinding.ActivityMainBinding
 import com.example.workdiary.fragment.WorkFragment
 import com.example.workdiary.fragment.DiaryFragment
+import com.example.workdiary.viewmodel.MainViewModel
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_main.*
 
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
     companion object{
         const val ADD_WORK_ACTIVITY = 105
     }
 
-    private val diaryFragment = DiaryFragment()
-    private val workFragment = WorkFragment()
+    private val viewModel: MainViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-        fragmentInit()
-        buttonInit()
-    }
+        val binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+        binding.activity = this
 
-    private fun fragmentInit() {
-        // 첫 fragment는 workFragment로 setting
-        setFragment(workFragment)
-    }
-
-    private fun buttonInit() {
-        tv_main_diaryBtn.setOnClickListener {
-            // 일지 버튼 클릭 시
-            setFragment(diaryFragment)
-            hideAddWorkBtn()
-            tv_main_diaryBtn.setBackgroundResource(R.drawable.top_rounded_rectangle_white)
-            tv_main_diaryBtn.setTextColor(resources.getColor(R.color.colorBlack))
-            tv_main_workBtn.setBackgroundResource(R.drawable.top_rounded_rectangle_black)
-            tv_main_workBtn.setTextColor(resources.getColor(R.color.colorWhite))
-        }
-        tv_main_workBtn.setOnClickListener {
-            // 노동 버튼 클릭 시
-            setFragment(workFragment)
-            showAddWorkBtn()
-            tv_main_workBtn.setBackgroundResource(R.drawable.top_rounded_rectangle_white)
-            tv_main_workBtn.setTextColor(resources.getColor(R.color.colorBlack))
-            tv_main_diaryBtn.setBackgroundResource(R.drawable.top_rounded_rectangle_black)
-            tv_main_diaryBtn.setTextColor(resources.getColor(R.color.colorWhite))
-        }
-        tv_main_addBtn.setOnClickListener {
-            // 노동 추가 버튼 클릭 시
-            val intent = Intent(this, AddWorkActivity::class.java)
-            startActivityForResult(intent, ADD_WORK_ACTIVITY)
+        viewModel.fragmentStateLiveData.observe(this) { state ->
+            replaceFragment(
+                resId = binding.flMainFragment.id,
+                fragment = when(state) {
+                    MainViewModel.FragmentState.WorkFragmentState -> WorkFragment()
+                    MainViewModel.FragmentState.DiaryFragmentState -> DiaryFragment()
+                }
+            )
+            binding.state = state.ordinal
         }
     }
 
-    private fun showAddWorkBtn() {
-        // AddWorkActivity로 이동하는 버튼 보이게 하기
-        tv_main_addBtn.visibility = View.VISIBLE
+    // 노동 버튼 클릭
+    fun clickWork() {
+        viewModel.updateFragmentState(MainViewModel.FragmentState.WorkFragmentState)
     }
 
-    private fun hideAddWorkBtn() {
-        // AddWorkActivity로 이동하는 버튼 안보이게 하기
-        tv_main_addBtn.visibility = View.GONE
+    // 일지 버튼 클릭
+    fun clickDiary() {
+        viewModel.updateFragmentState(MainViewModel.FragmentState.DiaryFragmentState)
     }
 
-    private fun setFragment(fragment: Fragment) {
-        // fragment setting
-        val fragmentTransaction = supportFragmentManager.beginTransaction()
-        fragmentTransaction.addToBackStack(null)
-        fragmentTransaction.replace(R.id.fl_main_fragment, fragment)
-        fragmentTransaction.commit()
+    // 노동 추가 버튼 클릭
+    fun clickAddWork() {
+        startActivityForResult(
+            Intent(this, AddWorkActivity::class.java),
+            ADD_WORK_ACTIVITY
+        )
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

@@ -1,148 +1,191 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context=".activity.AddWorkActivity">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <LinearLayout
+    <data>
+
+        <variable
+            name="activity"
+            type="com.example.workdiary.activity.AddWorkActivity" />
+
+        <variable
+            name="work"
+            type="com.example.workdiary.data.Work" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="30dp"
-        android:orientation="vertical">
+        android:layout_height="match_parent"
+        tools:context=".activity.AddWorkActivity">
 
-        <ImageView
+        <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/ib_addwork_backBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="30dp"
             android:background="@drawable/ic_arrow_left"
-            android:backgroundTint="@color/colorBlack" />
+            android:backgroundTint="@color/colorBlack"
+            android:onClick="@{() -> activity.clickBack()}"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
+        <androidx.appcompat.widget.AppCompatAutoCompleteTextView
+            android:id="@+id/act_addwork_title"
+            style="@style/style_normal_context"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="30dp"
             android:layout_marginTop="50dp"
-            android:orientation="horizontal">
+            android:layout_weight="2"
+            android:completionThreshold="1"
+            android:gravity="center"
+            android:hint="@string/work_name"
+            app:layout_constraintEnd_toStartOf="@id/act_addwork_set"
+            app:layout_constraintHorizontal_weight="2"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/ib_addwork_backBtn" />
 
-            <AutoCompleteTextView
-                android:id="@+id/act_addwork_title"
+        <androidx.appcompat.widget.AppCompatAutoCompleteTextView
+            android:id="@+id/act_addwork_set"
+            style="@style/style_normal_context"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="30dp"
+            android:layout_weight="1"
+            android:completionThreshold="1"
+            android:gravity="center"
+            android:hint="@string/set_name"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_weight="1"
+            app:layout_constraintStart_toEndOf="@id/act_addwork_title"
+            app:layout_constraintTop_toTopOf="@id/act_addwork_title" />
+
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv_addwork_pickDate"
+            style="@style/style_normal_bottom"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="30dp"
+            android:layout_marginEnd="20dp"
+            android:gravity="center"
+            android:onClick="@{() -> activity.clickSetDate()}"
+            android:padding="10dp"
+            android:text="@{@string/date_format(work.month, work.day, work.dayOfWeek)}"
+            app:layout_constraintEnd_toStartOf="@id/tv_addwork_pickStartTime"
+            app:layout_constraintHorizontal_weight="2"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/act_addwork_title"
+            tools:text="10월 17일 (수)" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv_addwork_pickStartTime"
+            style="@style/style_normal_bottom"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:onClick="@{() -> activity.clickSetStartTime()}"
+            android:padding="10dp"
+            android:text="@{@string/time_format(work.startHour, work.startMinute)}"
+            app:layout_constraintBottom_toBottomOf="@id/tv_addwork_pickDate"
+            app:layout_constraintEnd_toStartOf="@id/tv_addwork_until"
+            app:layout_constraintHorizontal_weight="1"
+            app:layout_constraintStart_toEndOf="@id/tv_addwork_pickDate"
+            app:layout_constraintTop_toTopOf="@id/tv_addwork_pickDate"
+            tools:text="08:00" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv_addwork_until"
+            style="@style/style_normal_context"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:text="@string/until_code"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_addwork_pickDate"
+            app:layout_constraintEnd_toStartOf="@id/tv_addwork_pickEndTime"
+            app:layout_constraintStart_toEndOf="@id/tv_addwork_pickStartTime"
+            app:layout_constraintTop_toTopOf="@+id/tv_addwork_pickDate" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv_addwork_pickEndTime"
+            style="@style/style_normal_bottom"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="30dp"
+            android:gravity="center"
+            android:onClick="@{() -> activity.clickSetEndTime()}"
+            android:padding="10dp"
+            android:text="@{@string/time_format(work.endHour, work.endMinute)}"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_addwork_pickDate"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_weight="1"
+            app:layout_constraintStart_toEndOf="@id/tv_addwork_until"
+            app:layout_constraintTop_toTopOf="@+id/tv_addwork_pickDate"
+            tools:text="20:00" />
+
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:id="@+id/ll_tmp"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="30dp"
+            android:gravity="center"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toStartOf="@id/btn_addwork_inputLowestMoney"
+            app:layout_constraintHorizontal_weight="1"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_addwork_pickDate">
+
+            <androidx.appcompat.widget.AppCompatTextView
                 style="@style/style_normal_context"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="2"
-                android:completionThreshold="1"
-                android:gravity="center"
-                android:hint="노동 이름" />
+                android:text="@string/money_per_hour" />
 
-            <AutoCompleteTextView
-                android:id="@+id/act_addwork_set"
+            <androidx.appcompat.widget.AppCompatEditText
+                android:id="@+id/et_addwork_money"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ems="6"
+                android:gravity="center" />
+
+            <androidx.appcompat.widget.AppCompatTextView
                 style="@style/style_normal_context"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:completionThreshold="1"
-                android:gravity="center"
-                android:hint="세트 이름" />
-        </LinearLayout>
+                android:text="@string/won" />
+        </androidx.appcompat.widget.LinearLayoutCompat>
 
-        <LinearLayout
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/btn_addwork_inputLowestMoney"
+            style="@style/style_normal_bottom"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="30dp"
+            android:gravity="center"
+            android:onClick="@{() -> activity.clickLowestMoney()}"
+            android:padding="10dp"
+            android:text="@string/write_lowest_money"
+            app:layout_constraintBottom_toBottomOf="@id/ll_tmp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/ll_tmp"
+            app:layout_constraintTop_toTopOf="@id/ll_tmp" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv_addwork_saveBtn"
+            style="@style/style_bottom_button_blue"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="30dp"
-            android:orientation="horizontal">
-
-            <TextView
-                android:id="@+id/tv_addwork_pickDate"
-                style="@style/style_normal_bottom"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="20dp"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:padding="10dp"
-                android:text="10월 17일 (수)" />
-
-            <TextView
-                android:id="@+id/tv_addwork_pickStartTime"
-                style="@style/style_normal_bottom"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:padding="10dp"
-                android:text="08:00" />
-
-            <TextView
-                style="@style/style_normal_context"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-                android:text="~" />
-
-            <TextView
-                android:id="@+id/tv_addwork_pickEndTime"
-                style="@style/style_normal_bottom"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:padding="10dp"
-                android:text="20:00" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="30dp"
-            android:orientation="horizontal">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:orientation="horizontal">
-
-                <TextView
-                    style="@style/style_normal_context"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="시급 " />
-
-                <EditText
-                    android:id="@+id/et_addwork_money"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:ems="6"
-                    android:gravity="center" />
-
-                <TextView
-                    style="@style/style_normal_context"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="원" />
-            </LinearLayout>
-
-            <TextView
-                android:id="@+id/btn_addwork_inputLowestMoney"
-                style="@style/style_normal_bottom"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:padding="10dp"
-                android:text="최저시급 입력" />
-        </LinearLayout>
-    </LinearLayout>
-
-    <TextView
-        android:id="@+id/tv_addwork_saveBtn"
-        style="@style/style_bottom_button_blue"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:gravity="center"
-        android:padding="20dp"
-        android:text="저장하기" />
-</RelativeLayout>
+            android:layout_alignParentBottom="true"
+            android:gravity="center"
+            android:onClick="@{() -> activity.clickSave()}"
+            android:padding="20dp"
+            android:text="저장하기"
+            app:layout_constraintBottom_toBottomOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
