@@ -1,28 +1,21 @@
-package com.example.workdiary.activity
+package com.example.workdiary.ui
 
 import android.app.Activity
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
-import android.content.Context
-import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
-import android.text.TextWatcher
 import android.widget.ArrayAdapter
 import androidx.activity.viewModels
-import com.example.workdiary.R
 import com.example.workdiary.common.AfterTextChangedListener
-import com.example.workdiary.common.DAY_OF_WEEK
 import com.example.workdiary.common.LOWEST_MONEY
 import com.example.workdiary.databinding.ActivityAddWorkBinding
-import com.example.workdiary.databinding.ActivityMainBinding
 import com.example.workdiary.viewmodel.AddWorkViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_add_work.*
 import kotlinx.android.synthetic.main.activity_add_work.view.*
 import java.util.*
-import kotlin.math.min
 
 @AndroidEntryPoint
 class AddWorkActivity : AppCompatActivity() {

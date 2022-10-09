@@ -6,9 +6,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.workdiary.R
-import com.example.workdiary.data.Work
-import java.text.SimpleDateFormat
-import java.util.*
+import com.example.workdiary.repository.localsource.Work
 
 class DiaryDetailAdapter(val items:List<Work>): RecyclerView.Adapter<DiaryDetailAdapter.MyViewHolder>() {
     inner class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {

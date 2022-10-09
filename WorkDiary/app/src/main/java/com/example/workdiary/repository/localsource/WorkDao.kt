@@ -1,9 +1,7 @@
-package com.example.workdiary.data
+package com.example.workdiary.repository.localsource
 
 import androidx.lifecycle.LiveData
 import androidx.room.*
-import com.example.workdiary.data.Work
-import dagger.Provides
 
 @Dao
 interface WorkDao {

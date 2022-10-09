@@ -7,17 +7,17 @@
 
         <variable
             name="activity"
-            type="com.example.workdiary.activity.AddWorkActivity" />
+            type="com.example.workdiary.ui.AddWorkActivity" />
 
         <variable
             name="work"
-            type="com.example.workdiary.data.Work" />
+            type="com.example.workdiary.repository.localsource.Work" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".activity.AddWorkActivity">
+        tools:context=".ui.AddWorkActivity">
 
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/ib_addwork_backBtn"

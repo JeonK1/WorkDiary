@@ -1,4 +1,4 @@
-package com.example.workdiary.fragment
+package com.example.workdiary.ui
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -15,7 +15,6 @@ import com.example.workdiary.adapter.DiaryAdapter
 import com.example.workdiary.data.DiaryInfo
 import com.example.workdiary.viewmodel.DiaryViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class DiaryFragment : Fragment() {

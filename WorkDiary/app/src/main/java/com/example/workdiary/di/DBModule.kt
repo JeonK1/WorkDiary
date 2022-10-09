@@ -2,8 +2,8 @@ package com.example.workdiary.di
 
 import android.content.Context
 import androidx.room.Room
-import com.example.workdiary.data.WorkDao
-import com.example.workdiary.data.WorkDatabase
+import com.example.workdiary.repository.localsource.WorkDao
+import com.example.workdiary.repository.localsource.WorkDatabase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

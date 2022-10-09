@@ -1,11 +1,11 @@
-package com.example.workdiary.data
+package com.example.workdiary.repository.localsource
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.example.workdiary.common.DATE_FORMAT
 import com.example.workdiary.common.DayOfWeek
-import com.example.workdiary.common.TIME_FORMAT
+import com.example.workdiary.data.Date
+import com.example.workdiary.data.Time
 import java.io.Serializable
 import java.util.*
 

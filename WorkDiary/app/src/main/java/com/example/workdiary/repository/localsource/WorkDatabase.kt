@@ -1,4 +1,4 @@
-package com.example.workdiary.data
+package com.example.workdiary.repository.localsource
 
 import androidx.room.Database
 import androidx.room.RoomDatabase

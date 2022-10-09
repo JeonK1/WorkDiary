@@ -1,21 +1,15 @@
-package com.example.workdiary.activity
+package com.example.workdiary.ui
 
 import android.app.Activity
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.View
 import androidx.activity.viewModels
-import androidx.fragment.app.Fragment
-import androidx.lifecycle.lifecycleScope
 import com.example.workdiary.R
 import com.example.workdiary.common.replaceFragment
 import com.example.workdiary.databinding.ActivityMainBinding
-import com.example.workdiary.fragment.WorkFragment
-import com.example.workdiary.fragment.DiaryFragment
 import com.example.workdiary.viewmodel.MainViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.android.synthetic.main.activity_main.*
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {

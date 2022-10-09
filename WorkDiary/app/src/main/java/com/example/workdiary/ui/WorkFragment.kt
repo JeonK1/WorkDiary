@@ -1,4 +1,4 @@
-package com.example.workdiary.fragment
+package com.example.workdiary.ui
 
 import android.app.Activity
 import android.content.Context
@@ -20,13 +20,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.workdiary.R
 import com.example.workdiary.viewmodel.WorkViewModel
-import com.example.workdiary.activity.AddWorkActivity
-import com.example.workdiary.activity.MainActivity
 import com.example.workdiary.adapter.WorkAdapter
-import com.example.workdiary.data.Work
+import com.example.workdiary.repository.localsource.Work
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.dialog_box.view.*
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class WorkFragment : Fragment() {
@@ -117,7 +114,7 @@ class WorkFragment : Fragment() {
     }
 
 
-    fun crateDialog(context: Context, work:Work, action: String, title: String, contents: String) {
+    fun crateDialog(context: Context, work: Work, action: String, title: String, contents: String) {
         // 다이얼로그 창 띄우기
         val mDialogView = LayoutInflater.from(context).inflate(R.layout.dialog_box, null)
         val mBuilder = AlertDialog.Builder(context).setView(mDialogView)

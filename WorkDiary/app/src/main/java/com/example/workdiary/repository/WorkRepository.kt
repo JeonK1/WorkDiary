@@ -1,10 +1,9 @@
-package com.example.workdiary.data
+package com.example.workdiary.repository
 
-import android.app.Application
 import android.os.AsyncTask
-import android.util.Log
 import androidx.lifecycle.LiveData
-import com.example.workdiary.WorkDiaryApplication
+import com.example.workdiary.repository.localsource.Work
+import com.example.workdiary.repository.localsource.WorkDao
 import javax.inject.Inject
 
 class WorkRepository @Inject constructor(

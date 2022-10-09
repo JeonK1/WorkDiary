@@ -9,7 +9,7 @@
 
         <variable
             name="activity"
-            type="com.example.workdiary.activity.MainActivity" />
+            type="com.example.workdiary.ui.MainActivity" />
 
         <!--
             0: WorkFragment
@@ -24,7 +24,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/colorGray"
-        tools:context=".activity.MainActivity">
+        tools:context=".ui.MainActivity">
 
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/iv_workdiary_icon"

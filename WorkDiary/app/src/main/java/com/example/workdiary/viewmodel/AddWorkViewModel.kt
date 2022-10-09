@@ -6,8 +6,8 @@ import androidx.lifecycle.ViewModel
 import com.example.workdiary.common.*
 import com.example.workdiary.data.Date
 import com.example.workdiary.data.Time
-import com.example.workdiary.data.Work
-import com.example.workdiary.data.WorkRepository
+import com.example.workdiary.repository.localsource.Work
+import com.example.workdiary.repository.WorkRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import java.util.*
 import javax.inject.Inject
