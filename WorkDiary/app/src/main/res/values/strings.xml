@@ -16,4 +16,8 @@
     <string name="work_name">노동 이름</string>
     <string name="set_name">세트 이름</string>
     <string name="until_code">~</string>
+    <string name="no_diary_list">아직 완료된 노동일정이 없어요</string>
+    <string name="no_work_list">새로운 노동일정을 추가해주세요</string>
+    <string name="no">아니오</string>
+    <string name="ok">예</string>
 </resources>

@@ -7,5 +7,5 @@ data class DiaryInfo(
     val month: Int,                 // 월
     val workList: MutableList<Work> // Work List
 ) {
-    constructor(year: Int, month: Int, work: Work):this(year, month, mutableListOf(work))
+    constructor(year: Int, month: Int, work: Work) : this(year, month, mutableListOf(work))
 }
