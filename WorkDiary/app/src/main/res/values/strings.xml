@@ -20,4 +20,8 @@
     <string name="no_work_list">새로운 노동일정을 추가해주세요</string>
     <string name="no">아니오</string>
     <string name="ok">예</string>
+    <string name="deleteWorkTitle">노동일정 제거</string>
+    <string name="deleteWorkContents">%s의 %s 노동 일정을 제거할까요??</string>
+    <string name="doneWorkTitle">노동 완료</string>
+    <string name="doneWorkContents">노동 기록을 일지로 옮길까요??</string>
 </resources>
