@@ -15,7 +15,7 @@ import javax.inject.Inject
 @HiltViewModel
 class AddWorkViewModel @Inject constructor(
     private val repository: WorkRepository
-): ViewModel() {
+) : ViewModel() {
 
     private val _workLiveData = with(Calendar.getInstance()) {
         MutableLiveData(
@@ -40,11 +40,11 @@ class AddWorkViewModel @Inject constructor(
         return repository.getTitleNames()
     }
 
-    fun getSetNames(title:String): List<String> {
+    fun getSetNames(title: String): List<String> {
         return repository.getSetNames(title)
     }
 
-    fun getWorks(title:String, setName:String): List<Work> {
+    fun getWorks(title: String, setName: String): List<Work> {
         return repository.getWorks(title, setName)
     }
 
@@ -52,39 +52,25 @@ class AddWorkViewModel @Inject constructor(
         _workLiveData.postValue(work)
     }
 
-    fun updateWorkDate(year: Int, month: Int, dayOfMonth: Int) {
-        _workLiveData.apply {
-            value?.let { currentWork ->
-                postValue(
-                    currentWork.copy(
-                        wDate = Date(year, month, dayOfMonth).toString()
-                    )
-                )
-            }
-        }
-    }
-
-    fun updateWorkStartTime(hourOfDay: Int, minute: Int) {
-        _workLiveData.apply {
-            value?.let { currentWork ->
-                postValue(
-                    currentWork.copy(
-                        wStartTime = Time(hourOfDay, minute).toString()
-                    )
-                )
-            }
-        }
-    }
-
-    fun updateWorkEndTime(hourOfDay: Int, minute: Int) {
-        _workLiveData.apply {
-            value?.let { currentWork ->
-                postValue(
-                    currentWork.copy(
-                        wEndTime = Time(hourOfDay, minute).toString()
-                    )
-                )
-            }
+    fun updateWork(
+        title: String? = null,
+        setName: String? = null,
+        date: Date? = null,
+        startTime: Time? = null,
+        endTime: Time? = null,
+        money: Int? = null,
+        isDone: Int? = null,
+    ) {
+        _workLiveData.value?.also { work ->
+            _workLiveData.value = work.copy(
+                wTitle = title ?: work.wTitle,
+                wSetName = setName ?: work.wSetName,
+                wDate = date?.toString() ?: work.wDate,
+                wStartTime = startTime?.toString() ?: work.wStartTime,
+                wEndTime = endTime?.toString() ?: work.wEndTime,
+                wMoney = money ?: work.wMoney,
+                wIsDone = isDone ?: work.wIsDone
+            )
         }
     }
 

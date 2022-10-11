@@ -3,6 +3,7 @@ package com.example.workdiary.ui
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -33,7 +34,7 @@ class WorkFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.rvWorkRecyclerView.adapter = WorkAdapter(listOf()).apply {
+        workAdapter = WorkAdapter(listOf()).apply {
             onItemClickListener = object : WorkAdapter.OnItemClickListener {
                 override fun OnItemClick(holder: WorkAdapter.MyViewHolder, view: View, position: Int) {
                     // item 클릭 시, 버튼 있는 화면 보여주기/숨기기
@@ -96,24 +97,14 @@ class WorkFragment : Fragment() {
             }
         }
 
+        binding.rvWorkRecyclerView.adapter = workAdapter
+
         workViewModel.getAllWork().observe(viewLifecycleOwner) { workList ->
             binding.isListEmpty = workList.isEmpty()
             if (workList.isNotEmpty()) {
                 // todo : DiffUtil 이용
+                Log.e("test", "${workList}")
                 workAdapter.setWorks(workList)
-            }
-        }
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == MainActivity.ADD_WORK_ACTIVITY) {
-            if (resultCode == Activity.RESULT_OK) {
-                // AddWorkActivity 에서 새로운 값을 추가함, DB에 추가해주기
-                with(workViewModel) {
-                    val newWork = data?.getSerializableExtra(AddWorkActivity.ADD_WORK_VALUE) as Work
-                    insert(newWork)
-                }
             }
         }
     }

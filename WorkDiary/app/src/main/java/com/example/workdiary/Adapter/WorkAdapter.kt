@@ -1,5 +1,6 @@
 package com.example.workdiary.adapter
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -52,7 +53,7 @@ class WorkAdapter(var items:List<Work>):RecyclerView.Adapter<WorkAdapter.MyViewH
         val sf = SimpleDateFormat("yyyy/MM/dd")
         val workDate = sf.parse(items[position].wDate)
         val today = with(Calendar.getInstance()) {
-            sf.parse("${get(Calendar.YEAR)}/${get(Calendar.MONTH)+1}/${get(Calendar.DATE)}")
+            sf.parse("${get(Calendar.YEAR)}/${get(Calendar.MONTH)}/${get(Calendar.DATE)}")
         }
         val workDday = if(today.time < workDate.time) "D-"+((workDate.time - today.time) / (60*60*24*1000)).toString() else "기한이 지났습니다"
 
@@ -69,7 +70,7 @@ class WorkAdapter(var items:List<Work>):RecyclerView.Adapter<WorkAdapter.MyViewH
         //xml에 적용하기
         holder.title.text = items[position].wTitle
         holder.setName.text = items[position].wSetName
-        holder.date.text = """${items[position].wDate.split("/")[1]}월 ${items[position].wDate.split("/")[2]}일"""
+        holder.date.text = """${items[position].month?.plus(1) ?: "00"}월 ${items[position].day ?: "00"}일"""
         holder.dday.text = workDday
         holder.workStartNEnd.text = """${"%02d".format(startTimeHour)}:${"%02d".format(startTimeMin)} ~ ${"%02d".format(endTimeHour)}:${"%02d".format(endTimeMin)}"""
         holder.workTime.text = """( ${workTimeHour}h ${"%02d".format(workTimeMin)}m )"""

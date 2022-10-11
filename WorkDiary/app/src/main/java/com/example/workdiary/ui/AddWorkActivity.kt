@@ -6,22 +6,19 @@ import android.app.TimePickerDialog
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
+import android.text.format.DateFormat
 import android.widget.ArrayAdapter
 import androidx.activity.viewModels
 import com.example.workdiary.common.AfterTextChangedListener
 import com.example.workdiary.common.LOWEST_MONEY
+import com.example.workdiary.data.Date
+import com.example.workdiary.data.Time
 import com.example.workdiary.databinding.ActivityAddWorkBinding
 import com.example.workdiary.viewmodel.AddWorkViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.android.synthetic.main.activity_add_work.*
-import kotlinx.android.synthetic.main.activity_add_work.view.*
-import java.util.*
 
 @AndroidEntryPoint
 class AddWorkActivity : AppCompatActivity() {
-    companion object {
-        const val ADD_WORK_VALUE = "NEW_WORK"
-    }
 
     private val addWorkViewModel: AddWorkViewModel by viewModels()
     private lateinit var binding: ActivityAddWorkBinding
@@ -82,7 +79,9 @@ class AddWorkActivity : AppCompatActivity() {
                 DatePickerDialog(
                     this,
                     DatePickerDialog.OnDateSetListener { _, year, month, dayOfMonth ->
-                        addWorkViewModel.updateWorkDate(year, month, dayOfMonth)
+                        addWorkViewModel.updateWork(
+                            date = Date(year, month, dayOfMonth)
+                        )
                     },
                     work.year!!,
                     work.month!!,
@@ -100,11 +99,13 @@ class AddWorkActivity : AppCompatActivity() {
                     this,
                     android.R.style.Theme_Holo_Light_Dialog,
                     TimePickerDialog.OnTimeSetListener { _, hourOfDay, minute ->
-                        addWorkViewModel.updateWorkStartTime(hourOfDay, minute)
+                        addWorkViewModel.updateWork(
+                            startTime = Time(hourOfDay, minute)
+                        )
                     },
                     work.startHour!!,
                     work.startMinute!!,
-                    android.text.format.DateFormat.is24HourFormat(this)
+                    DateFormat.is24HourFormat(this)
                 ).show()
             }
         }
@@ -118,11 +119,13 @@ class AddWorkActivity : AppCompatActivity() {
                     this,
                     android.R.style.Theme_Holo_Light_Dialog,
                     TimePickerDialog.OnTimeSetListener { _, hourOfDay, minute ->
-                        addWorkViewModel.updateWorkEndTime(hourOfDay, minute)
+                        addWorkViewModel.updateWork(
+                            endTime = Time(hourOfDay, minute)
+                        )
                     },
                     work.endHour!!,
                     work.endMinute!!,
-                    android.text.format.DateFormat.is24HourFormat(this)
+                    DateFormat.is24HourFormat(this)
                 ).show()
             }
         }
@@ -135,6 +138,11 @@ class AddWorkActivity : AppCompatActivity() {
 
     // 저장하기
     fun clickSave() {
+        addWorkViewModel.updateWork(
+            title = "${binding.actAddworkTitle.text}",
+            setName = "${binding.actAddworkSet.text}",
+            money = binding.etAddworkMoney.text.toString().toIntOrNull() ?: 0,
+        )
         addWorkViewModel.addNewWork()
         setResult(Activity.RESULT_OK)
         finish()

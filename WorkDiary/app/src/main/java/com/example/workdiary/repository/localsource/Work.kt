@@ -3,6 +3,7 @@ package com.example.workdiary.repository.localsource
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.example.workdiary.common.DAY_OF_WEEK
 import com.example.workdiary.common.DayOfWeek
 import com.example.workdiary.data.Date
 import com.example.workdiary.data.Time
@@ -44,9 +45,11 @@ data class Work(
     val month get() = wDate.split("/")[1].toIntOrNull()
     val day get() = wDate.split("/")[2].toIntOrNull()
     val dayOfWeek get() = if (year != null && month != null && day != null) {
-        Calendar.getInstance().apply {
-            set(year!!, month!!, day!!)
-        }.DayOfWeek
+        DAY_OF_WEEK.get(
+            Calendar.getInstance().apply {
+                set(year!!, month!!, day!!)
+            }.DayOfWeek
+        )
     } else {
         null
     }

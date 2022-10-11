@@ -35,6 +35,4 @@ class WorkViewModel @Inject constructor(
     fun getAllWork(): LiveData<List<Work>> {
         return allWorks
     }
-
-
 }
