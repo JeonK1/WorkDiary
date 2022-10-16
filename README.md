@@ -8,7 +8,7 @@
 - <a href="https://blog.naver.com/ponson1017/222273070284">MVP 코드 UnitTest 시도 일지</a>
 <br><br>
 <h2>코드파일 구성</h2>
-<img src="/readme_img/4.png" width=600 />
+<img src="/readme_img/4.png" width=900 />
 - MVP의 디자인 패턴으로 코드가 작성되으며, 각 파일별 연결관계는 다음과 같다.
 <br><br>
 <h2>개발 환경</h2><br>
