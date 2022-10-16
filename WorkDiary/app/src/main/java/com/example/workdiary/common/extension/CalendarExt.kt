@@ -1,4 +1,4 @@
-package com.example.workdiary.common
+package com.example.workdiary.common.extension
 
 import java.util.*
 

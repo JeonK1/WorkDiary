@@ -1,21 +1,26 @@
 package com.example.workdiary.adapter
 
+import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
-import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.example.workdiary.R
 import com.example.workdiary.data.DiaryInfo
+import com.example.workdiary.databinding.ItemDiaryBinding
+import com.example.workdiary.repository.localsource.Work
 import java.text.DecimalFormat
+import kotlin.math.ceil
 
-class DiaryAdapter(var items:List<DiaryInfo>): RecyclerView.Adapter<DiaryAdapter.MyViewHolder>() {
+class DiaryAdapter(
+    val context: Context,
+    var items:List<DiaryInfo> = listOf()
+): RecyclerView.Adapter<DiaryAdapter.MyViewHolder>() {
+
     inner class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        var title: TextView = itemView.findViewById(R.id.tv_itemdiary_title)
-        var totalMoney: TextView = itemView.findViewById(R.id.tv_itemdiary_totalMoney)
-        var workList: RecyclerView = itemView.findViewById(R.id.rv_itemdiary_workRecyclerView)
-        var bottomView: View = itemView.findViewById(R.id.view_itemdiary_bottomLine)
+        val binding = ItemDiaryBinding.bind(itemView)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
@@ -23,39 +28,22 @@ class DiaryAdapter(var items:List<DiaryInfo>): RecyclerView.Adapter<DiaryAdapter
         return MyViewHolder(v)
     }
 
-    override fun getItemCount(): Int {
-        return items.size
-    }
+    override fun getItemCount(): Int = items.size
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
-        // 마지막 item은 하단 구분선 제거하기
-        if(items.size-1 == position){
-            holder.bottomView.visibility = View.GONE
+        holder.binding.apply {
+            viewItemdiaryBottomLine.isVisible = items.size - 1 != position // 마지막 item 구분선 제거
+            tvItemdiaryTitle.text = context.getString(R.string.date_format_ym).format(items[position].year, items[position].month)
+            tvItemdiaryTotalMoney.text = context.getString(R.string.total_money).format(getTotalMoneyString(items[position].workList))
+            rvItemdiaryWorkRecyclerView.adapter = DiaryDetailAdapter(items[position].workList)
         }
-
-        // recyclerView 적용
-        holder.title.text = "${items[position].year}년 ${"%02d".format(items[position].month)}월"
-        holder.workList.layoutManager = LinearLayoutManager(holder.itemView.context, LinearLayoutManager.VERTICAL, false)
-        holder.workList.adapter = DiaryDetailAdapter(items[position].workList)
-
-        // totalMoney 계산하기
-        var totalMoney = 0
-        for(i in 0 until items[position].workList.size){
-            // 노동시간 구하기
-            val startTimeStamp = items[position].workList[i].wStartTime.split(":")[0].toInt()*60 +
-                    items[position].workList[i].wStartTime.split(":")[1].toInt()
-            val endTimeStamp = items[position].workList[i].wEndTime.split(":")[0].toInt()*60 +
-                    items[position].workList[i].wEndTime.split(":")[1].toInt()
-            val workTimeHour = (endTimeStamp-startTimeStamp)/60
-            val workTimeMin = if((endTimeStamp-startTimeStamp)%60 >= 30) 0.5 else 0.0
-
-            totalMoney += (items[position].workList[i].wMoney * workTimeHour) +
-                    (items[position].workList[i].wMoney * workTimeMin).toInt()
-        }
-        val decimalFormat = DecimalFormat("###,###.##")
-        val totalMoneyStr = decimalFormat.format(totalMoney)
-        holder.totalMoney.text = "Total : ${totalMoneyStr}원"
     }
+
+    // totalMoney 계산하기
+    private fun getTotalMoneyString(workList: List<Work>): String =
+        DecimalFormat(context.getString(R.string.money_decimal_format)).format(
+            workList.sumOf { (it.workTimeHour + it.workTimeMinute.toDouble() / 60) * it.wMoney }.toInt()
+        )
 
     fun setDiaryList(diaryList:List<DiaryInfo>) {
         this.items = diaryList

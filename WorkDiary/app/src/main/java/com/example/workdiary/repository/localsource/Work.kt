@@ -3,8 +3,9 @@ package com.example.workdiary.repository.localsource
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.example.workdiary.common.DATE_FORMAT
 import com.example.workdiary.common.DAY_OF_WEEK
-import com.example.workdiary.common.DayOfWeek
+import com.example.workdiary.common.extension.DayOfWeek
 import com.example.workdiary.data.Date
 import com.example.workdiary.data.Time
 import java.io.Serializable
@@ -33,7 +34,7 @@ data class Work(
         0,
         wTitle,
         wSetName,
-        Date(wDate.year, wDate.month, wDate.day).toString(),
+        Date(wDate.year, wDate.month - 1, wDate.day).toString(),
         Time(wStartTime.hour, wStartTime.minute).toString(),
         Time(wEndTime.hour, wEndTime.minute).toString(),
         wMoney,
@@ -41,22 +42,19 @@ data class Work(
     )
 
     // parsed by DATE_FORMAT (@see com.example.workdiary.common.Const)
-    val year get() = wDate.split("/")[0].toIntOrNull()
-    val month get() = wDate.split("/")[1].toIntOrNull()
-    val day get() = wDate.split("/")[2].toIntOrNull()
-    val dayOfWeek get() = if (year != null && month != null && day != null) {
-        DAY_OF_WEEK.get(
-            Calendar.getInstance().apply {
-                set(year!!, month!!, day!!)
-            }.DayOfWeek
-        )
-    } else {
-        null
-    }
+    val year get() = wDate.split("/")[0].toIntOrNull() ?: 0
+    val month get() = wDate.split("/")[1].toIntOrNull()?.plus(1) ?: 0
+    val day get() = wDate.split("/")[2].toIntOrNull() ?: 0
+    val dayOfWeek get() = DAY_OF_WEEK[Calendar.getInstance().apply {
+        set(year, month, day)
+    }.DayOfWeek]
 
     // parsed by TIME_FORMAT (@see com.example.workdiary.common.Const)
-    val startHour get() = wStartTime.split(":")[0].toIntOrNull()
-    val startMinute get() = wStartTime.split(":")[1].toIntOrNull()
-    val endHour get() = wEndTime.split(":")[0].toIntOrNull()
-    val endMinute get() = wEndTime.split(":")[1].toIntOrNull()
+    val startHour get() = wStartTime.split(":")[0].toIntOrNull() ?: 0
+    val startMinute get() = wStartTime.split(":")[1].toIntOrNull() ?: 0
+    val endHour get() = wEndTime.split(":")[0].toIntOrNull() ?: 0
+    val endMinute get() = wEndTime.split(":")[1].toIntOrNull() ?: 0
+
+    val workTimeHour get() = ((endHour * 60 + endMinute) - (startHour * 60 + startMinute)) / 60
+    val workTimeMinute get() = ((endHour * 60 + endMinute) - (startHour * 60 + startMinute)) % 60
 }

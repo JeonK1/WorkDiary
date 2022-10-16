@@ -8,8 +8,13 @@
     <string name="work">노동</string>
     <string name="workdiary">노동일지</string>
 
-    <string name="date_format">%02d월 %02d일 (%s)</string>
+    <string name="date_format">yyyy/mm/dd</string>
+    <string name="date_format_ym">%04d년 %02d월</string>
+    <string name="date_format_md">%02d월 %02d일</string>
+    <string name="date_format_with_dow">%02d월 %02d일 (%s)</string>
     <string name="time_format">%02d:%02d</string>
+    <string name="time_until_format">%02d:%02d ~ %02d:%02d</string>
+    <string name="work_time">(%dh %02dm)</string>
     <string name="write_lowest_money">최저시급 입력</string>
     <string name="money_per_hour">시급</string>
     <string name="won">원</string>
@@ -24,4 +29,10 @@
     <string name="deleteWorkContents">%s의 %s 노동 일정을 제거할까요??</string>
     <string name="doneWorkTitle">노동 완료</string>
     <string name="doneWorkContents">노동 기록을 일지로 옮길까요??</string>
+    <string name="end_of_date">기한이 지났습니다</string>
+    <string name="today">오늘</string>
+    <string name="d_day">D-%d</string>
+    <string name="lowest_money">8590</string>
+    <string name="total_money">Total : %s원</string>
+    <string name="money_decimal_format">###,###.##</string>
 </resources>

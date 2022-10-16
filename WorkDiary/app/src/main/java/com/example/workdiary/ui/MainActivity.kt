@@ -4,7 +4,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.activity.viewModels
-import com.example.workdiary.common.replaceFragment
+import com.example.workdiary.common.extension.replaceFragment
 import com.example.workdiary.databinding.ActivityMainBinding
 import com.example.workdiary.viewmodel.MainViewModel
 import dagger.hilt.android.AndroidEntryPoint

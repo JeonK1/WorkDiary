@@ -9,8 +9,8 @@ import android.text.Editable
 import android.text.format.DateFormat
 import android.widget.ArrayAdapter
 import androidx.activity.viewModels
-import com.example.workdiary.common.AfterTextChangedListener
-import com.example.workdiary.common.LOWEST_MONEY
+import com.example.workdiary.R
+import com.example.workdiary.common.extension.AfterTextChangedListener
 import com.example.workdiary.data.Date
 import com.example.workdiary.data.Time
 import com.example.workdiary.databinding.ActivityAddWorkBinding
@@ -133,7 +133,7 @@ class AddWorkActivity : AppCompatActivity() {
 
     // 최저시급
     fun clickLowestMoney() {
-        binding.etAddworkMoney.setText(LOWEST_MONEY.toString())
+        binding.etAddworkMoney.setText(getString(R.string.lowest_money))
     }
 
     // 저장하기

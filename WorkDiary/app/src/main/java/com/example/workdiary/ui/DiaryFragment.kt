@@ -35,19 +35,16 @@ class DiaryFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        diaryAdapter = DiaryAdapter(requireContext())
+
         // recyclerView 초기화
-        binding.rvDiaryRecyclerView.apply {
-            adapter = DiaryAdapter(listOf())
-        }
+        binding.rvDiaryRecyclerView.adapter = diaryAdapter
 
         // viewModel observer init
         viewModel.getAllDiaryInfo().observe(viewLifecycleOwner) { workList ->
             binding.isListEmpty = workList.isEmpty()
             val diaryList = WorkManager(workList).getDiaryList()
-            if (diaryList.isNotEmpty()) {
-                // todo : DiffUtil 이용
-                diaryAdapter.setDiaryList(diaryList)
-            }
+            diaryAdapter.setDiaryList(diaryList)
         }
     }
 }
