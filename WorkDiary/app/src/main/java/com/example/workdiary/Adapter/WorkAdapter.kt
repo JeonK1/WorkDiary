@@ -59,8 +59,9 @@ class WorkAdapter(val context: Context) : ListAdapter<Work, WorkAdapter.MyViewHo
     }
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
-        //dday 구하기
         val item = getItem(position)
+
+        //dday 구하기
         val dateFormat = SimpleDateFormat(context.getString(R.string.date_format))
         val workDateTimeStamp =
             dateFormat.parse(
