@@ -90,7 +90,7 @@ class WorkFragment : Fragment() {
         // viewModel observer init
         workViewModel.getAllWork().observe(viewLifecycleOwner) { workList ->
             binding.isListEmpty = workList.isEmpty()
-            workAdapter.setWorks(workList)
+            workAdapter.submitList(workList)
         }
     }
 }
