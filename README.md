@@ -12,6 +12,7 @@ WorkDiary MVVM
 <h2>프로젝트 개요</h2>
 - 기존에 개발되었던 것을 MVVM 패턴으로 rebuilding 하는 작업을 진행하였다. (<a href="https://github.com/JeonK1/WorkDiary/tree/mvvm">WorkDiary MVVM Version</a>) <br>
 - <a href="https://blog.naver.com/ponson1017/222902098163">[WorkDiary 재개편] 1. 코드 전체 리팩토링 </a><br>
+- <a href="https://blog.naver.com/ponson1017/222903733453">[WorkDiary 재개편] 2. DiffUtil 적용 </a><br>
 <br><br>
 <h2>코드파일 구성</h2>
 <img src="/readme_img/4.png" width=600 />
