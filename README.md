@@ -8,6 +8,7 @@ WorkDiary MVVM
 - Dagger Hilt 로 Di 적용 <br>
 - View Binding + Data Binding <br>
 - ConstraintLayout 을 이용하여 View depth 최적화 <br>
+- ListAdapter 적용 <br>
 <br><br>
 <h2>프로젝트 개요</h2>
 - 기존에 개발되었던 것을 MVVM 패턴으로 rebuilding 하는 작업을 진행하였다. (<a href="https://github.com/JeonK1/WorkDiary/tree/mvvm">WorkDiary MVVM Version</a>) <br>
