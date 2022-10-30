@@ -20,6 +20,7 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class DiaryFragment : Fragment() {
+
     private val viewModel: DiaryViewModel by viewModels()
     private lateinit var diaryAdapter: DiaryAdapter
     private lateinit var binding : FragmentDiaryBinding

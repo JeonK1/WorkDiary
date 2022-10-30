@@ -1,6 +1,5 @@
 package com.example.workdiary.repository
 
-import android.os.AsyncTask
 import androidx.lifecycle.LiveData
 import com.example.workdiary.repository.localsource.Work
 import com.example.workdiary.repository.localsource.WorkDao
@@ -9,7 +8,6 @@ import javax.inject.Inject
 class WorkRepository @Inject constructor(
     private val workDao: WorkDao
 ) {
-
     suspend fun insert(work: Work) {
         // work insert
         workDao.insert(work)

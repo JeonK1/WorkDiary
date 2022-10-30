@@ -1,6 +1,5 @@
 package com.example.workdiary.viewmodel
 
-import android.provider.SyncStateContract.Helpers.update
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -16,10 +15,6 @@ class WorkViewModel @Inject constructor(
 ): ViewModel() {
     val allWorks: LiveData<List<Work>> by lazy {
         repository.getWorksAll()
-    }
-
-    fun insert(work: Work) = viewModelScope.launch {
-        repository.insert(work)
     }
 
     fun update(work: Work) = viewModelScope.launch {

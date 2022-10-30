@@ -16,6 +16,7 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class WorkFragment : Fragment() {
+    
     private val workViewModel: WorkViewModel by viewModels()
     private lateinit var workAdapter: WorkAdapter
     private lateinit var binding : FragmentWorkBinding

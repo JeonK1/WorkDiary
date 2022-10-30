@@ -28,5 +28,4 @@ interface WorkDao {
 
     @Query("select * from Work where wTitle=:title and wSetName=:setName order by wDate DESC, wStartTime DESC")
     suspend fun getWorks(title:String, setName: String): List<Work>
-
 }

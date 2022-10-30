@@ -11,7 +11,6 @@ import javax.inject.Inject
 class DiaryViewModel @Inject constructor(
     private val repository: WorkRepository
 ): ViewModel() {
-
     val allDiary: LiveData<List<Work>> by lazy {
         repository.getDiaryAll()
     }

@@ -22,7 +22,6 @@ import javax.inject.Inject
 class AddWorkViewModel @Inject constructor(
     private val repository: WorkRepository
 ) : ViewModel() {
-
     private val _workLiveData = with(Calendar.getInstance()) {
         MutableLiveData(
             // 초기 설정 값
