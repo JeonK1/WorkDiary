@@ -3,15 +3,18 @@ package com.example.workdiary.viewmodel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.workdiary.common.extension.DayOfMonth
 import com.example.workdiary.common.extension.HourOfDay
 import com.example.workdiary.common.extension.Month
 import com.example.workdiary.common.extension.Year
 import com.example.workdiary.data.Date
 import com.example.workdiary.data.Time
-import com.example.workdiary.repository.localsource.Work
 import com.example.workdiary.repository.WorkRepository
+import com.example.workdiary.repository.localsource.Work
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.util.*
 import javax.inject.Inject
 
@@ -39,17 +42,19 @@ class AddWorkViewModel @Inject constructor(
     }
     val workLiveData: LiveData<Work> get() = _workLiveData
 
-    fun getTitleNames(): List<String> {
-        return repository.getTitleNames()
+    suspend fun getTitleNames() = withContext(viewModelScope.coroutineContext) {
+        repository.getTitleNames()
     }
 
-    fun getSetNames(title: String): List<String> {
-        return repository.getSetNames(title)
-    }
+    suspend fun getSetNames(title: String) =
+        withContext(viewModelScope.coroutineContext) {
+            repository.getSetNames(title)
+        }
 
-    fun getWorks(title: String, setName: String): List<Work> {
-        return repository.getWorks(title, setName)
-    }
+    suspend fun getWorks(title: String, setName: String) =
+        withContext(viewModelScope.coroutineContext) {
+            repository.getWorks(title, setName)
+        }
 
     fun updateWork(work: Work) {
         _workLiveData.postValue(work)
@@ -77,7 +82,7 @@ class AddWorkViewModel @Inject constructor(
         }
     }
 
-    fun addNewWork() {
+    fun addNewWork() = viewModelScope.launch {
         workLiveData.value?.let { work ->
             repository.insert(work)
         }

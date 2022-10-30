@@ -74,7 +74,7 @@
             android:gravity="center"
             android:onClick="@{() -> activity.clickSetDate()}"
             android:padding="10dp"
-            android:text="@{@string/date_format_with_dow(work.month + 1, work.day, work.dayOfWeek)}"
+            android:text="@{@string/date_format_with_dow(work.month, work.day, work.dayOfWeek)}"
             app:layout_constraintEnd_toStartOf="@id/tv_addwork_pickStartTime"
             app:layout_constraintHorizontal_weight="2"
             app:layout_constraintStart_toStartOf="parent"

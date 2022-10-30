@@ -41,7 +41,7 @@ class DiaryFragment : Fragment() {
         binding.rvDiaryRecyclerView.adapter = diaryAdapter
 
         // viewModel observer init
-        viewModel.getAllDiaryInfo().observe(viewLifecycleOwner) { workList ->
+        viewModel.allDiary.observe(viewLifecycleOwner) { workList ->
             binding.isListEmpty = workList.isEmpty()
             val diaryList = WorkManager(workList).getDiaryList()
             diaryAdapter.setDiaryList(diaryList)

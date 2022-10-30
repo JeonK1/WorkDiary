@@ -12,11 +12,7 @@ class DiaryViewModel @Inject constructor(
     private val repository: WorkRepository
 ): ViewModel() {
 
-    private val allDiary: LiveData<List<Work>> by lazy {
+    val allDiary: LiveData<List<Work>> by lazy {
         repository.getDiaryAll()
-    }
-
-    fun getAllDiaryInfo(): LiveData<List<Work>> {
-        return allDiary
     }
 }

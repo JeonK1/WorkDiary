@@ -50,7 +50,7 @@ class WorkFragment : Fragment() {
                         noText = getString(R.string.no)
                     ).apply {
                         okClickListener = { dialog ->
-                            workViewModel.getAllWork().value?.get(position)?.also { work ->
+                            workViewModel.allWorks.value?.get(position)?.also { work ->
                                 workViewModel.delete(work)
                             }
                             dialog?.dismiss()
@@ -71,7 +71,7 @@ class WorkFragment : Fragment() {
                         noText = getString(R.string.no)
                     ).apply {
                         okClickListener = { dialog ->
-                            workViewModel.getAllWork().value?.get(position)?.also { work ->
+                            workViewModel.allWorks.value?.get(position)?.also { work ->
                                 workViewModel.setIsDone(work)
                             }
                             dialog?.dismiss()
@@ -88,7 +88,7 @@ class WorkFragment : Fragment() {
         binding.rvWorkRecyclerView.adapter = workAdapter
 
         // viewModel observer init
-        workViewModel.getAllWork().observe(viewLifecycleOwner) { workList ->
+        workViewModel.allWorks.observe(viewLifecycleOwner) { workList ->
             binding.isListEmpty = workList.isEmpty()
             workAdapter.submitList(workList)
         }

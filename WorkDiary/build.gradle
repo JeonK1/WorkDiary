@@ -6,6 +6,7 @@ buildscript {
         hilt_version = "2.39.1"
         lifecycle_version = "2.5.1"
         fragment_version = "1.5.3"
+        coroutine_version = "1.6.3"
     }
     repositories {
         google()
