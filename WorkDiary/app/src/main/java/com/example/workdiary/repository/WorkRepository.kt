@@ -1,13 +1,22 @@
 package com.example.workdiary.repository
 
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.asFlow
+import androidx.lifecycle.map
+import com.example.workdiary.data.DiaryInfo
+import com.example.workdiary.manager.WorkManager
 import com.example.workdiary.repository.localsource.Work
 import com.example.workdiary.repository.localsource.WorkDao
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class WorkRepository @Inject constructor(
     private val workDao: WorkDao
 ) {
+    private val workManager by lazy { WorkManager() }
+
     suspend fun insert(work: Work) {
         // work insert
         workDao.insert(work)
@@ -23,13 +32,34 @@ class WorkRepository @Inject constructor(
         workDao.delete(work)
     }
 
-    fun getDoneWorksAll(): LiveData<List<Work>> {
-        // DiaryInfo에 넣기 쉽도록 Work 값 정렬해서 가져오기
-        return workDao.getDoneWorksAll()
+    fun getDiaryInfoAll(): LiveData<List<DiaryInfo>> {
+        // DiaryInfo 값 가져오기
+        return workDao.getDoneWorksAll().map {
+            workManager.getDiaryList(it)
+        }
     }
 
     fun getWorksAll(): LiveData<List<Work>> {
         // WorkAdapter에 넣기 위한 Work 값 가져오기
         return workDao.getWorkInfoAll()
+    }
+
+
+    suspend fun getTitleNames() = withContext(Dispatchers.Default) {
+        workDao.getWorkInfoAll().asFlow().map {
+            workManager.getTitleNames(it)
+        }
+    }
+
+    suspend fun getSetNames(title: String) = withContext(Dispatchers.Default) {
+        workDao.getWorkInfoAll().asFlow().map {
+            workManager.getSetNames(it, title)
+        }
+    }
+
+    suspend fun getWorks(title: String, setName: String) = withContext(Dispatchers.Default) {
+        workDao.getWorkInfoAll().asFlow().map {
+            workManager.getWorks(it, title, setName)
+        }
     }
 }
