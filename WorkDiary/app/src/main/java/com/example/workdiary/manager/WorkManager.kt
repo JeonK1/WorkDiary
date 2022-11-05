@@ -3,10 +3,8 @@ package com.example.workdiary.manager
 import com.example.workdiary.data.DiaryInfo
 import com.example.workdiary.repository.localsource.Work
 
-class WorkManager(
-    val workList: List<Work>
-) {
-    fun getDiaryList(): List<DiaryInfo> {
+class WorkManager {
+    fun getDiaryList(workList: List<Work>): List<DiaryInfo> {
         val diaryList = mutableListOf<DiaryInfo>()
         var idx = -1
         for (work in workList) {
@@ -31,4 +29,10 @@ class WorkManager(
         }
         return diaryList
     }
+
+    fun getTitleNames(workList: List<Work>) = workList.map { it.wTitle }
+
+    fun getSetNames(workList: List<Work>, title:String) = workList.filter { it.wTitle == title }.map { it.wSetName }
+
+    fun getWorks(workList: List<Work>, title: String, setName: String) = workList.filter { it.wTitle == title && it.wSetName == setName }
 }

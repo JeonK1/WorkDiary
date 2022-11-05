@@ -1,18 +1,17 @@
 package com.example.workdiary.viewmodel
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import com.example.workdiary.common.extension.DayOfMonth
 import com.example.workdiary.common.extension.HourOfDay
 import com.example.workdiary.common.extension.Month
 import com.example.workdiary.common.extension.Year
 import com.example.workdiary.data.Date
 import com.example.workdiary.data.Time
+import com.example.workdiary.manager.WorkManager
 import com.example.workdiary.repository.WorkRepository
 import com.example.workdiary.repository.localsource.Work
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.util.*
@@ -22,6 +21,9 @@ import javax.inject.Inject
 class AddWorkViewModel @Inject constructor(
     private val repository: WorkRepository
 ) : ViewModel() {
+
+    private val workManager by lazy { WorkManager() }
+
     private val _workLiveData = with(Calendar.getInstance()) {
         MutableLiveData(
             // 초기 설정 값
@@ -42,18 +44,22 @@ class AddWorkViewModel @Inject constructor(
     val workLiveData: LiveData<Work> get() = _workLiveData
 
     suspend fun getTitleNames() = withContext(viewModelScope.coroutineContext) {
-        repository.getTitleNames()
+        repository.getWorksAll().asFlow().map {
+            workManager.getTitleNames(it)
+        }
     }
 
-    suspend fun getSetNames(title: String) =
-        withContext(viewModelScope.coroutineContext) {
-            repository.getSetNames(title)
+    suspend fun getSetNames(title: String) = withContext(viewModelScope.coroutineContext) {
+        repository.getWorksAll().asFlow().map {
+            workManager.getSetNames(it, title)
         }
+    }
 
-    suspend fun getWorks(title: String, setName: String) =
-        withContext(viewModelScope.coroutineContext) {
-            repository.getWorks(title, setName)
+    suspend fun getWorks(title: String, setName: String) = withContext(viewModelScope.coroutineContext) {
+        repository.getWorksAll().asFlow().map {
+            workManager.getWorks(it, title, setName)
         }
+    }
 
     fun updateWork(work: Work) {
         _workLiveData.postValue(work)

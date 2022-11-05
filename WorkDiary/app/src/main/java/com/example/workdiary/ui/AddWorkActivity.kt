@@ -18,6 +18,7 @@ import com.example.workdiary.viewmodel.AddWorkViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
@@ -38,13 +39,12 @@ class AddWorkActivity : AppCompatActivity() {
 
         binding.apply {
             // title 관련 AutoCOmpleteTextView에 모든 title stringList 적용
-
             CoroutineScope(Dispatchers.Main).launch {
                 actAddworkTitle.setAdapter(
                     ArrayAdapter(
                         applicationContext,
                         android.R.layout.simple_dropdown_item_1line,
-                        addWorkViewModel.getTitleNames()
+                        addWorkViewModel.getTitleNames().first()
                     )
                 )
             }
@@ -58,7 +58,7 @@ class AddWorkActivity : AppCompatActivity() {
                             ArrayAdapter(
                                 applicationContext,
                                 android.R.layout.simple_dropdown_item_1line,
-                                addWorkViewModel.getSetNames(wTitle)
+                                addWorkViewModel.getSetNames(wTitle).first()
                             )
                         )
                     }
@@ -72,7 +72,7 @@ class AddWorkActivity : AppCompatActivity() {
                         addWorkViewModel.getWorks(
                             title = actAddworkTitle.text.toString(),
                             setName = s.toString()
-                        ).getOrNull(0)?.let { work ->
+                        ).first().getOrNull(0)?.let { work ->
                             addWorkViewModel.updateWork(work)
                         }
                     }
