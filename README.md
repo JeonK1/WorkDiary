@@ -1,14 +1,13 @@
-# WorkDiary_MVVM
-WorkDiary MVVM
-<br>개발기간 : 2022.10.04 ~ <진행중>
-<h2>기술 스택</h2>
-- Android Kotlin <br>
-- Room database를 활용하여 데이터 관리 <br>
-- Room + LiveData + ViewModel 을 활용한 MVVM 아키텍쳐 구현 <br>
-- Dagger Hilt 로 Di 적용 <br>
-- View Binding + Data Binding <br>
-- ConstraintLayout 을 이용하여 View depth 최적화 <br>
-- ListAdapter 적용 <br>
+# WorkDiary
+<h4>아르바이트 기록전용 어플리케이션, WorkDiary</h4>
+<h4>* 브랜치에서 각 버전의 개발 코드를 확인하실 수 있습니다. *</h4>
+
+<b>Repository List</b>
+- MVC
+- MVP
+- MVVM
+- MVVM-hilt
+
 <br><br>
 <h2>프로젝트 개요</h2>
 - 기존에 개발되었던 것을 MVVM 패턴으로 rebuilding 하는 작업을 진행하였다. (<a href="https://github.com/JeonK1/WorkDiary/tree/mvvm">WorkDiary MVVM Version</a>) <br>
