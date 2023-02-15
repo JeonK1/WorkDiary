@@ -1,99 +1,115 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/colorGray"
-    android:orientation="vertical"
-    tools:context=".activity.MainActivity">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="15dp"
-        android:orientation="horizontal"
-        android:padding="15dp">
+    <data>
 
-        <ImageView
+        <import type="android.view.View" />
+
+        <variable
+            name="activity"
+            type="com.example.workdiary.ui.MainActivity" />
+
+        <!--
+            0: WorkFragment
+            1: DiaryFragment
+        -->
+        <variable
+            name="state"
+            type="int" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/colorGray"
+        tools:context=".ui.MainActivity">
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/iv_workdiary_icon"
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:layout_marginRight="15dp"
-            android:background="@drawable/ic_workdiary" />
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="15dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ic_workdiary" />
 
-        <TextView
+        <androidx.appcompat.widget.AppCompatTextView
             style="@style/style_bold_title_big"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
-            android:text="노동일지" />
-    </LinearLayout>
+            android:layout_marginStart="15dp"
+            android:text="@string/workdiary"
+            app:layout_constraintBottom_toBottomOf="@id/iv_workdiary_icon"
+            app:layout_constraintStart_toEndOf="@id/iv_workdiary_icon"
+            app:layout_constraintTop_toTopOf="@id/iv_workdiary_icon" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="30dp"
-        android:layout_marginRight="30dp"
-        android:orientation="horizontal">
-
-        <TextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/tv_main_workBtn"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="@drawable/top_rounded_rectangle_white"
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="15dp"
+            android:background="@{state == 0 ? @drawable/top_rounded_rectangle_white : @drawable/top_rounded_rectangle_black}"
             android:fontFamily="@font/nanumgothic_extrabold"
             android:gravity="center"
+            android:onClick="@{() -> activity.clickWork()}"
             android:padding="15dp"
-            android:text="노동"
-            android:textColor="@color/colorBlack"
-            android:textSize="17dp" />
+            android:text="@string/work"
+            android:textColor="@{state == 0 ? @color/colorBlack : @color/colorWhite}"
+            android:textSize="17sp"
+            app:layout_constraintEnd_toStartOf="@id/tv_main_diaryBtn"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/iv_workdiary_icon"
+            tools:background="@drawable/top_rounded_rectangle_white"
+            tools:textColor="@color/colorBlack" />
 
-        <TextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/tv_main_diaryBtn"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="@drawable/top_rounded_rectangle_black"
+            android:layout_marginEnd="30dp"
+            android:background="@{state == 0 ? @drawable/top_rounded_rectangle_black : @drawable/top_rounded_rectangle_white}"
             android:fontFamily="@font/nanumgothic_extrabold"
             android:gravity="center"
+            android:onClick="@{() -> activity.clickDiary()}"
             android:padding="15dp"
-            android:text="일지"
-            android:textColor="@color/colorWhite"
-            android:textSize="17dp" />
-    </LinearLayout>
-
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="30dp"
-        android:layout_marginRight="30dp"
-        android:layout_marginBottom="15dp"
-        android:layout_weight="1"
-        android:background="@drawable/bottom_rounded_rectangle_white">
+            android:text="@string/diary"
+            android:textColor="@{state == 0 ? @color/colorWhite : @color/colorBlack}"
+            android:textSize="17sp"
+            app:layout_constraintBottom_toBottomOf="@id/tv_main_workBtn"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/tv_main_workBtn"
+            app:layout_constraintTop_toTopOf="@id/tv_main_workBtn"
+            tools:background="@drawable/top_rounded_rectangle_black"
+            tools:textColor="@color/colorWhite" />
 
         <FrameLayout
             android:id="@+id/fl_main_fragment"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="0dp"
+            android:layout_marginHorizontal="30dp"
+            android:layout_marginBottom="15dp"
+            android:background="@drawable/bottom_rounded_rectangle_white"
+            app:layout_constraintBottom_toTopOf="@id/tv_main_addBtn"
+            app:layout_constraintTop_toBottomOf="@id/tv_main_workBtn" />
 
-        <TextView
-            android:id="@+id/tv_main_comment"
-            style="@style/style_normal_comment"
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv_main_addBtn"
+            style="@style/style_bottom_rounded_button_blue"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
+            android:layout_marginBottom="15dp"
             android:gravity="center"
-            android:text="새로운 노동일정을 추가해주세요" />
-    </FrameLayout>
-
-    <TextView
-        android:id="@+id/tv_main_addBtn"
-        style="@style/style_bottom_rounded_button_blue"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="30dp"
-        android:layout_marginRight="30dp"
-        android:layout_marginBottom="15dp"
-        android:gravity="center"
-        android:padding="10dp"
-        android:text="일정 추가 버튼" />
-</LinearLayout>
+            android:onClick="@{() -> activity.clickAddWork()}"
+            android:padding="10dp"
+            android:text="@string/add_work_title"
+            android:visibility="@{state == 0 ? View.VISIBLE : View.GONE}"
+            app:layout_constraintBottom_toBottomOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

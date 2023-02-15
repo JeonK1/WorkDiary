@@ -1,5 +1,38 @@
 <resources>
     <string name="app_name">WorkDiary</string>
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string name="add_work_title">일정 추가 버튼</string>
+    <string name="no_work">새로운 노동일정을 추가해주세요</string>
+    <string name="diary">일지</string>
+    <string name="work">노동</string>
+    <string name="workdiary">노동일지</string>
+
+    <string name="date_format">yyyy/mm/dd</string>
+    <string name="date_format_ym">%04d년 %02d월</string>
+    <string name="date_format_md">%02d월 %02d일</string>
+    <string name="date_format_with_dow">%02d월 %02d일 (%s)</string>
+    <string name="time_format">%02d:%02d</string>
+    <string name="time_until_format">%02d:%02d ~ %02d:%02d</string>
+    <string name="work_time">(%dh %02dm)</string>
+    <string name="write_lowest_money">최저시급 입력</string>
+    <string name="money_per_hour">시급</string>
+    <string name="won">원</string>
+    <string name="work_name">노동 이름</string>
+    <string name="set_name">세트 이름</string>
+    <string name="until_code">~</string>
+    <string name="no_diary_list">아직 완료된 노동일정이 없어요</string>
+    <string name="no_work_list">새로운 노동일정을 추가해주세요</string>
+    <string name="no">아니오</string>
+    <string name="ok">예</string>
+    <string name="deleteWorkTitle">노동일정 제거</string>
+    <string name="deleteWorkContents">%s의 %s 노동 일정을 제거할까요??</string>
+    <string name="doneWorkTitle">노동 완료</string>
+    <string name="doneWorkContents">노동 기록을 일지로 옮길까요??</string>
+    <string name="end_of_date">기한이 지났습니다</string>
+    <string name="today">오늘</string>
+    <string name="d_day">D-%d</string>
+    <string name="lowest_money">8590</string>
+    <string name="total_money">Total : %s원</string>
+    <string name="money_decimal_format">###,###.##</string>
 </resources>

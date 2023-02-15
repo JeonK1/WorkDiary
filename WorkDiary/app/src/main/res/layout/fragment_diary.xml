@@ -1,16 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:padding="10dp"
-    tools:context=".fragment.DiaryFragment">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_diary_recyclerView"
+    <data>
+        <import type="android.view.View"/>
+        
+        <variable
+            name="isListEmpty"
+            type="Boolean" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="100dp"
-        tools:itemCount="3"
-        tools:listitem="@layout/item_diary" />
-</FrameLayout>
+        android:layout_height="match_parent"
+        android:padding="10dp"
+        tools:context=".ui.DiaryFragment">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_diary_recyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="100dp"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:itemCount="3"
+            tools:listitem="@layout/item_diary" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv_main_comment"
+            style="@style/style_normal_comment"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginHorizontal="30dp"
+            android:layout_marginBottom="15dp"
+            android:gravity="center"
+            android:visibility="@{isListEmpty ? View.VISIBLE : View.GONE}"
+            android:text="@string/no_diary_list"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
